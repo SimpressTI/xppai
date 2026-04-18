@@ -26,6 +26,7 @@ Use this role when the task is mainly about:
 - deciding between multiple possible approaches
 - identifying the smallest safe change path
 - defining technical scope before implementation
+- Use this role by default for structural explanation of forms, classes, XPO artifacts, object responsibility, and where logic should live.
 
 ## What you should do
 

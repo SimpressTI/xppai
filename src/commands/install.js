@@ -3,8 +3,8 @@
 const assets = require('../assets');
 const { loadTarget } = require('../targets');
 
-module.exports = function install(args) {
-  const target = args['--target'];
+module.exports = function install(flags, _args) {
+  const target = flags['--target'];
 
   if (!target) {
     process.stderr.write('error: --target is required\n');
@@ -12,7 +12,7 @@ module.exports = function install(args) {
   }
 
   const adapter = loadTarget(target);
-  const installDir = adapter.resolveInstallDir(args);
+  const installDir = adapter.resolveInstallDir(flags);
 
   if (!installDir) {
     process.stderr.write(
@@ -22,7 +22,7 @@ module.exports = function install(args) {
     process.exit(1);
   }
 
-  const mode = args['--mode'] || 'copy';
+  const mode = flags['--mode'] || 'copy';
   adapter.export(assets.path(), installDir, { mode });
   process.stdout.write(`installed to ${installDir}\n`);
 };

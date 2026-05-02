@@ -8,6 +8,7 @@ XppAI bundles a curated set of AX 2009 / X++ skills and lets you:
 - locate the installed skill bundle
 - export skills for a target runtime
 - install skills into supported runtimes
+- load and cache XPO files
 
 ## Requirements
 
@@ -79,6 +80,59 @@ Optional symlink mode:
 ```bash
 xppai install --target <target> --mode symlink
 ```
+
+### Load an XPO file into cache
+
+```bash
+xppai xpo load <file> [--cache-dir <directory>]
+```
+
+Default cache location is user-local:
+
+`%LOCALAPPDATA%\xppai\cache\xpo\`
+
+### Set active XPO cache directory
+
+```bash
+xppai xpo cache-use <directory>
+```
+
+### Copy XPO cache to another directory
+
+```bash
+xppai xpo cache-copy <destination> [--yes] [--cache-dir <directory>]
+```
+
+If destination has existing content, xppai warns that all content will be erased and replaced, and asks for confirmation unless `--yes` is provided.
+
+### Show active/resolved XPO cache directory
+
+```bash
+xppai xpo cache-show [--cache-dir <directory>]
+```
+
+### Export one XPO per modified object from cache
+
+```bash
+xppai xpo export-modified --out <directory> [--file <source-xpo-file>] [--cache-dir <directory>]
+```
+
+Behavior:
+- Always generates one `.xpo` file per object.
+- Compares latest cached version against previous cached version of the same source XPO file.
+- Exports only changed/new objects.
+
+Example (single class object source file):
+
+```bash
+xppai xpo load "C:\Users\Roberta\Desktop\Class_PurchCalcTax_Invoice.xpo"
+# ...load updated revision of the same file again...
+xppai xpo export-modified --out "C:\Users\Roberta\Desktop\xpo_out" --file "C:\Users\Roberta\Desktop\Class_PurchCalcTax_Invoice.xpo"
+```
+
+Output files are always per object, for example:
+
+`Class_PurchCalcTax_Invoice.xpo`
 
 ## Supported targets
 

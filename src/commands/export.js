@@ -3,9 +3,9 @@
 const assets = require('../assets');
 const { loadTarget } = require('../targets');
 
-module.exports = function exportCmd(args) {
-  const target = args['--target'];
-  const outDir = args['--out'];
+module.exports = function exportCmd(flags, _args) {
+  const target = flags['--target'];
+  const outDir = flags['--out'];
 
   if (!target) {
     process.stderr.write('error: --target is required\n');
@@ -17,7 +17,7 @@ module.exports = function exportCmd(args) {
   }
 
   const adapter = loadTarget(target);
-  const mode = args['--mode'] || 'copy';
+  const mode = flags['--mode'] || 'copy';
   adapter.export(assets.path(), outDir, { mode });
   process.stdout.write(`exported to ${outDir}\n`);
 };

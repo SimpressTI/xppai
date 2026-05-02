@@ -94,7 +94,7 @@ These apply to all code analysis and fix output — never violate them:
 - **Localization blocks are untouchable.** Never modify code inside `<GBR>`, `<GIN>`, `<GJP>`, `<GSA>`, `<GTH>` tags. These are Microsoft-owned.
 - **AX 2009 only.** No D365, no modern AX features.
 - **Variable declarations at top of method.** AX 2009 requirement — no inline declarations.
-- **Before proposing any fix via xppai-codefix:** collect SPS tag (Project ID, Developer name, Date DD/MM/YYYY), state exact object location (Class/Table/Form + Method + Layer), and flag any signature changes.
+- **Before proposing any fix via xppai-codefix:** collect SPS tag fields (Tag ID, Project ID, Dev name, Date DD/MM/YYYY), state exact object location (Class/Table/Form + Method + Layer), and flag any signature changes.
 - **Evidence labels:** always distinguish Confirmed (in code) / Likely (inferred) / Unknown (missing context).
 
 ## Key AX 2009 Behaviors Encoded in Skills

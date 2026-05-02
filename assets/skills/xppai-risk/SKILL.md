@@ -7,6 +7,8 @@ description: Use when assessing how risky it is to modify X++ AX 2009 code befor
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+
 ## Overview
 
 Pre-change risk assessment for AX 2009 code. Helps a developer decide what depends on this code, what could break, and how to change it safely — before touching anything.

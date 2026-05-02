@@ -7,6 +7,8 @@ description: Use when analyzing X++ AX 2009 profiler traces, code stack traces, 
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+
 ## Overview
 
 Specialist technique for reading AX 2009 X++ profiler outputs and code execution stack traces, identifying the dominant call path, and ranking bottlenecks by actual impact — not generic advice.

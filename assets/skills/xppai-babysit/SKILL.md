@@ -7,6 +7,8 @@ description: Use when given any X++ AX 2009 artifact — stack trace, method, cl
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+
 ## Overview
 
 Paste any AX 2009 artifact. This skill detects what it is, applies the correct skill sequence, and produces clearly labeled sections — one per skill applied. No decisions required from the user.

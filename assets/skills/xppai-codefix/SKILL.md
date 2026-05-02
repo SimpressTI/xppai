@@ -7,6 +7,8 @@ description: Use when proposing X++ AX 2009 code fixes for identified performanc
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+
 ## Overview
 
 Specialist technique for generating the smallest effective X++ fix that solves an identified issue without unnecessary redesign, preserving business behavior and fitting AX 2009 coding conventions.

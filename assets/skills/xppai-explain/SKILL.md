@@ -7,6 +7,8 @@ description: Use when reading unfamiliar X++ AX 2009 code — methods, classes, 
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+
 ## Overview
 
 Reads any AX 2009 artifact and explains it in terms a real teammate can act on: business purpose, technical role, execution entry points, downstream calls, side effects, and hidden complexity.

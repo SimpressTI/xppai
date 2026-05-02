@@ -7,6 +7,8 @@ description: Use when reviewing X++ or general ERP source code for architectural
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+
 ## Overview
 
 Senior architecture review lens applied to production code: identify what should stay, what is fragile, what is missing, and what will be expensive to change. Prefers practical incremental improvements over idealized redesign.

@@ -7,6 +7,8 @@ description: Use when given any X++ AX 2009 artifact and you need an intelligent
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+
 ## Overview
 
 Senior AX 2009 analyst that reads any artifact, reasons about what's actually going on, decides which lenses to apply, and produces a practical assessment. Not a fixed pipeline — thinks before acting.

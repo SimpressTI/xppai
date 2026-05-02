@@ -7,6 +7,8 @@ description: Use when analyzing AX 2009 posting flows, document generation, Form
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+
 ## Overview
 
 Specialist for AX 2009 posting flows — the most opaque and framework-driven part of the system. Makes posting flows understandable, debuggable, and safe to change without breaking the framework sequence.

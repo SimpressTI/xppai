@@ -579,16 +579,20 @@ inventDim = InventDim::findOrCreate(inventDim);
 
 ## XPO Intake Gate (All Skills)
 
-When user input includes XPO content, load it into cache before analysis.
+This gate is mandatory for every XppAI analysis skill.
+If XPO input is detected, run the intake command immediately before any analysis text.
+Do not delay intake until after classification, summaries, or clarifying discussion.
 
-Detect XPO from either:
+Detect XPO from any of these:
 - File path ending in `.xpo`
+- Absolute or relative file path that resolves to an existing `.xpo` file
 - Pasted content containing AX object headers like `CLASS #`, `TABLE #`, `FORM #`, `QUERY #`, `MAP #`, `VIEW #`, `JOB #`, `PROJECT #`
 
 Command policy:
-- If user provides a file path: run `xppai xpo load "<file>"`
-- If user pastes raw XPO text: run `xppai xpo load-stdin --name "pasted.xpo"` with pasted content on stdin
-- If stdin piping is unavailable in the runtime: write pasted text to a temporary `.xpo` file and run `xppai xpo load "<temp-file>"`
+- If user provides or implies an `.xpo` file path: run `xppai xpo load "<file>"` first.
+- If user pastes raw XPO text: run `xppai xpo load-stdin --name "pasted.xpo"` with pasted content on stdin first.
+- If stdin piping is unavailable in the runtime: write pasted text to a temporary `.xpo` file and run `xppai xpo load "<temp-file>"`.
+- If both a file path and pasted XPO text are present, prioritize the explicit file path.
 
 Validation rule:
 - Only write cache for pasted content when XPO is complete.

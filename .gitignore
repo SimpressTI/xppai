@@ -1,5 +1,6 @@
 .claude/
 reports/
+docs/superpowers/
 node_modules/
 coverage/
 *.xpo

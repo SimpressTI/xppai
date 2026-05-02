@@ -75,6 +75,10 @@ Quick reference for available skills and usage guidance.
 
 ## Common Flows
 
+## XPO Intake Behavior
+
+When an XPO file or pasted XPO text is provided, XppAI loads it into the active analysis context once before analysis. Orchestrator skills such as `xppai-papai` and `xppai-babysit` pass `XPO intake already completed for this request` to selected specialist skills so they do not import the same XPO again. Specialist skills still perform XPO intake when used standalone.
+
 ### Unknown Artifact
 
 1. `xppai-papai`  

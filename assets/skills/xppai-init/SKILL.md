@@ -577,10 +577,10 @@ inventDim = InventDim::findOrCreate(inventDim);
 
 ---
 
-## XPO Intake Gate (All Skills)
+## XPO Intake Gate
 
-This gate is mandatory for every XppAI analysis skill.
-If XPO input is detected, run the intake command immediately before any analysis text.
+This gate is mandatory for XppAI analysis skills when XPO input is present and intake has not already been completed for the current request.
+If XPO input is detected, run the intake command immediately before analysis text.
 Do not delay intake until after classification, summaries, or clarifying discussion.
 
 Detect XPO from any of these:
@@ -597,6 +597,14 @@ Command policy:
 Validation rule:
 - Only write cache for pasted content when XPO is complete.
 - If pasted content is partial/incomplete, do not write cache; continue analysis directly from pasted text and state that cache import was skipped due to incomplete XPO input.
+
+## XPO Intake State
+
+- If this skill is running standalone and XPO input is detected, run XPO intake before analysis.
+- If an orchestrator states `XPO intake already completed for this request`, do not run any XPO intake command again.
+- Treat a newly provided XPO as replacing the active XPO analysis context for the current request.
+- Before running the intake command for a newly provided XPO, state that the active XPO cache context will be refreshed for this request.
+- Do not run unrelated shell commands to inspect files, search repositories, list directories, or discover context unless the user asked for that or the XPO load command failed and diagnosis is required.
 
 ## Rules for All XppAI Skills
 

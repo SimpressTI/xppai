@@ -7,7 +7,7 @@ description: Use when analyzing AX 2009 posting flows, document generation, Form
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
-**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+**MANDATORY PRE-STEP:** Run the XPO Intake Gate only when XPO input is present and no orchestrator has already completed intake for this request.
 
 ## Overview
 

@@ -7,7 +7,7 @@ description: Use when given any X++ AX 2009 artifact — stack trace, method, cl
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
-**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, run XPO intake at most once per user request before classification or analysis output.
 
 ## Overview
 
@@ -20,6 +20,9 @@ If input is an XPO file path or pasted XPO text (object headers such as `CLASS #
 - File path: `xppai xpo load "<file>"`
 - Pasted text: `xppai xpo load-stdin --name "pasted.xpo"` with text on stdin
 - If pasted XPO is incomplete and load fails, continue classification/analysis from text and state cache import was skipped
+- Run XPO intake at most once per user request.
+- After successful intake, pass this state to selected skills: `XPO intake already completed for this request`.
+- Selected skills must not run XPO intake again.
 
 ## Step 1 — Classify the Artifact
 

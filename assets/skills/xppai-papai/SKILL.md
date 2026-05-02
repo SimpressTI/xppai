@@ -7,7 +7,7 @@ description: Use when given any X++ AX 2009 artifact and you need an intelligent
 
 **REQUIRED BACKGROUND:** Load `xppai-init` before applying this skill.
 
-**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, execute the xppai-init XPO Intake Gate immediately before any analysis output.
+**MANDATORY PRE-STEP:** If input includes pasted XPO text or a .xpo file path, run XPO intake at most once per user request before any analysis output.
 
 ## Overview
 
@@ -17,9 +17,14 @@ Senior AX 2009 analyst that reads any artifact, reasons about what's actually go
 
 Before Step 1, check whether the artifact is XPO input (file path or pasted XPO text with object headers like `CLASS #`, `TABLE #`, `FORM #`).
 
-- For XPO file path: run `xppai xpo load "<file>"`
-- For pasted XPO text: run `xppai xpo load-stdin --name "pasted.xpo"` with pasted text on stdin
-- If pasted XPO is incomplete and cache load fails, continue analysis from provided text and mark cache import as skipped
+- For a newly provided XPO, state that the active XPO cache context will be refreshed for this request.
+- For XPO file path: run `xppai xpo load "<file>"`.
+- For pasted XPO text: run `xppai xpo load-stdin --name "pasted.xpo"` with pasted text on stdin.
+- If pasted XPO is incomplete and cache load fails, continue analysis from provided text and mark cache import as skipped.
+- Run XPO intake at most once per user request.
+- After successful intake, record and pass this state to selected skills: `XPO intake already completed for this request`.
+- When applying selected skills, pass the completed intake state; selected skills must not run XPO intake again.
+- Do not run unrelated shell commands to inspect files, search repositories, list directories, or discover context unless the user asked for that or the XPO load command failed and diagnosis is required.
 
 ## How It Works
 
@@ -47,6 +52,7 @@ Use the following as guidance — not as rigid rules:
 | Simple isolated method, no structural concern | explain + risk only — skip architect |
 
 **Do not apply a skill if it adds no value for this specific artifact.** A stack trace does not need `xppai-architect`. A clean utility method does not need `xppai-posting`.
+Only select skills that serve the user's prompt goal. For "explain what is inside this XPO", usually apply `xppai-explain` after intake; add risk, architecture, posting, stack, or codefix only when the prompt or loaded content clearly calls for those lenses.
 
 ## Output Format
 

@@ -8,7 +8,7 @@ const { runCli } = require('../helpers/cli');
 const { mkdtemp } = require('../helpers/tmp');
 const { xpoLoadSampleFragment } = require('../fixtures/xpo');
 
-test('xpo analyze-* aliases execute and preserve output shape', () => {
+test('xpo analyze-* aliases execute with persistent cache between reads', () => {
   const tempRoot = mkdtemp('xppai-xpo-analyze-');
   const tempLocal = path.join(tempRoot, 'local');
   const cacheDir = path.join(tempRoot, 'cache');

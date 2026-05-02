@@ -8,7 +8,7 @@ const { runCli } = require('../helpers/cli');
 const { mkdtemp } = require('../helpers/tmp');
 const { xpoLoadSampleFragment, classesVersion1, classesVersion2 } = require('../fixtures/xpo');
 
-test('xpo list/read/grep query cached objects without reload', () => {
+test('xpo read keeps cache available for additional queries', () => {
   const tempRoot = mkdtemp('xppai-xpo-query-');
   const tempLocal = path.join(tempRoot, 'local');
   const cacheDir = path.join(tempRoot, 'cache');
@@ -29,19 +29,24 @@ test('xpo list/read/grep query cached objects without reload', () => {
   assert.match(listOut, /objects: 3/);
   assert.match(listOut, /Class: 1/);
 
+  const grepOut = runCli(['xpo', 'grep', '--contains', 'CustAccount', '--cache-dir', cacheDir], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
+  assert.match(grepOut, /Table #CustTable/);
+
   const readOut = runCli(['xpo', 'read', '--type', 'class', '--name', 'MyClass', '--cache-dir', cacheDir], {
     env: { ...process.env, LOCALAPPDATA: tempLocal },
   });
   assert.match(readOut, /object: Class #MyClass/);
   assert.match(readOut, /METHODS/);
 
-  const grepOut = runCli(['xpo', 'grep', '--contains', 'CustAccount', '--cache-dir', cacheDir], {
+  const grepOutAfterRead = runCli(['xpo', 'grep', '--contains', 'CustAccount', '--cache-dir', cacheDir], {
     env: { ...process.env, LOCALAPPDATA: tempLocal },
   });
-  assert.match(grepOut, /Table #CustTable/);
+  assert.match(grepOutAfterRead, /Table #CustTable/);
 });
 
-test('xpo read fails on ambiguous object names without --file', () => {
+test('xpo load keeps only one active cached file (latest load wins)', () => {
   const tempRoot = mkdtemp('xppai-xpo-query-');
   const tempLocal = path.join(tempRoot, 'local');
   const cacheDir = path.join(tempRoot, 'cache');
@@ -60,14 +65,14 @@ test('xpo read fails on ambiguous object names without --file', () => {
     env: { ...process.env, LOCALAPPDATA: tempLocal },
   });
 
-  assert.throws(() => {
-    runCli(['xpo', 'read', '--type', 'Class', '--name', 'A', '--cache-dir', cacheDir], {
-      env: { ...process.env, LOCALAPPDATA: tempLocal },
-    });
-  }, /ambiguous object match/);
+  const listOut = runCli(['xpo', 'list', '--cache-dir', cacheDir], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
+  assert.match(listOut, new RegExp(fileB.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  assert.doesNotMatch(listOut, new RegExp(fileA.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 });
 
-test('xpo load warns when overwriting active cache entry for same source path', () => {
+test('xpo load replaces previous cache contents for same source path', () => {
   const tempRoot = mkdtemp('xppai-xpo-query-');
   const tempLocal = path.join(tempRoot, 'local');
   const cacheDir = path.join(tempRoot, 'cache');
@@ -82,5 +87,13 @@ test('xpo load warns when overwriting active cache entry for same source path', 
   const out = runCli(['xpo', 'load', fileA, '--cache-dir', cacheDir], {
     env: { ...process.env, LOCALAPPDATA: tempLocal },
   });
-  assert.match(out, /warning: overwriting active cache entry for source/);
+  assert.match(out, /loaded XPO:/);
+
+  runCli(['xpo', 'snapshot', '--cache-dir', cacheDir, '--json'], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
+  const readOut = runCli(['xpo', 'read', '--type', 'Class', '--name', 'A', '--cache-dir', cacheDir], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
+  assert.match(readOut, /info\("v2"\)/);
 });

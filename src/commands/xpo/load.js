@@ -105,8 +105,15 @@ function updateTopIndex(cacheDir, entry) {
   return existingForPath.some((f) => f.fileHash !== entry.fileHash);
 }
 
-function loadFromRaw(flags, raw, sourcePath) {
+function clearCacheDir(cacheDir) {
+  fs.rmSync(cacheDir, { recursive: true, force: true });
+}
+
+function loadFromRaw(flags, raw, sourcePath, opts = {}) {
   const cacheDir = resolveCacheDir(flags);
+  if (!opts.preserveCache) {
+    clearCacheDir(cacheDir);
+  }
   ensureCacheStructure(cacheDir);
 
   const absSource = nodePath.resolve(sourcePath);
@@ -180,3 +187,4 @@ module.exports.loadFromRaw = loadFromRaw;
 module.exports.loadFromFile = loadFromFile;
 module.exports.parseObjects = parseObjects;
 module.exports.isLikelyCompleteXpo = isLikelyCompleteXpo;
+module.exports.clearCacheDir = clearCacheDir;

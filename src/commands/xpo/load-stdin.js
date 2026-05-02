@@ -27,6 +27,7 @@ module.exports = function loadStdin(flags, _args) {
   }
 
   const cacheDir = resolveCacheDir(flags);
+  load.clearCacheDir(cacheDir);
   ensureCacheStructure(cacheDir);
 
   const name = sanitizeBasename(flags['--name'] || 'pasted.xpo');
@@ -35,5 +36,5 @@ module.exports = function loadStdin(flags, _args) {
   fs.mkdirSync(sourceDir, { recursive: true });
   fs.writeFileSync(sourcePath, raw, 'utf8');
 
-  return load.loadFromRaw(flags, raw, sourcePath);
+  return load.loadFromRaw(flags, raw, sourcePath, { preserveCache: true });
 };

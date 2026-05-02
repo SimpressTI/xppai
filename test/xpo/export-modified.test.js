@@ -8,7 +8,7 @@ const { runCli } = require('../helpers/cli');
 const { mkdtemp } = require('../helpers/tmp');
 const { classesVersion1, classesVersion2 } = require('../fixtures/xpo');
 
-test('xpo export-modified writes one xpo per changed object', () => {
+test('xpo export-modified exports active cached objects when cache history is reset per load', () => {
   const tempRoot = mkdtemp('xppai-expmod-');
   const tempLocal = path.join(tempRoot, 'local');
   const cacheDir = path.join(tempRoot, 'cache');
@@ -43,10 +43,11 @@ test('xpo export-modified writes one xpo per changed object', () => {
   ], {
     env: { ...process.env, LOCALAPPDATA: tempLocal },
   });
-  assert.match(out, /modified objects: 1/);
+  assert.match(out, /baseline: none/);
+  assert.match(out, /modified objects: 2/);
 
   const files = fs.readdirSync(outDir).sort();
-  assert.deepEqual(files, ['Class_A.xpo']);
+  assert.deepEqual(files, ['Class_A.xpo', 'Class_B.xpo']);
   const content = fs.readFileSync(path.join(outDir, 'Class_A.xpo'), 'utf8');
   assert.match(content, /info\("v2"\)/);
 });

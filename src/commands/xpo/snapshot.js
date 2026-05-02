@@ -3,11 +3,6 @@
 const { collectObjects, loadIndexOrExit, normalizeType, pickEntries } = require('./query-store');
 const { writeSessionAuth } = require('./session-auth');
 
-function preview(content, limit) {
-  const text = String(content || '').replace(/\r?\n/g, '\\n');
-  return text.length > limit ? `${text.slice(0, limit)}...` : text;
-}
-
 module.exports = function snapshot(flags, _args) {
   const { cacheDir, files, fingerprint } = loadIndexOrExit(flags);
   const entries = pickEntries(files, flags['--file']);
@@ -41,10 +36,6 @@ module.exports = function snapshot(flags, _args) {
     objects: objects.map((obj) => ({
       type: obj.type,
       name: obj.name,
-      filePath: obj.filePath,
-      sourceRef: obj.sourceRef,
-      contentHash: obj.contentHash,
-      preview: preview(obj.content, 240),
     })),
   };
 

@@ -29,8 +29,7 @@ test('xpo snapshot returns a bounded JSON inventory for the active cache', () =>
   assert.equal(payload.files.length, 1);
   assert.equal(payload.objectCount, 3);
   assert.deepEqual(payload.byType, { Class: 1, Form: 1, Table: 1 });
-  assert.equal(payload.objects[0].preview.length > 0, true);
-  assert.match(payload.objects[0].preview, /Class #MyClass/);
+  assert.deepEqual(Object.keys(payload.objects[0]).sort(), ['name', 'type']);
 });
 
 test('xpo snapshot respects file and type filters', () => {
@@ -53,6 +52,6 @@ test('xpo snapshot respects file and type filters', () => {
   assert.equal(payload.objectCount, 1);
   assert.deepEqual(payload.byType, { Class: 1 });
   assert.equal(payload.objects.length, 1);
+  assert.deepEqual(Object.keys(payload.objects[0]).sort(), ['name', 'type']);
   assert.equal(payload.objects[0].type, 'Class');
 });
-

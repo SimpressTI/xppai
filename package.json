@@ -1,6 +1,6 @@
 {
   "name": "xppai",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "LLM-runtime-agnostic X++ AX 2009 skill suite",
   "license": "MIT",
   "repository": {
@@ -33,8 +33,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "dependencies": {
-    "xppai": "^1.0.5"
   }
 }

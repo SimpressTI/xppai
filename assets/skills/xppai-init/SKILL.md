@@ -588,25 +588,20 @@ Detect XPO from any of these:
 - Absolute or relative file path that resolves to an existing `.xpo` file
 - Pasted content containing AX object headers like `CLASS #`, `TABLE #`, `FORM #`, `QUERY #`, `MAP #`, `VIEW #`, `JOB #`, `PROJECT #`
 
-Command policy:
-- If user provides a new `.xpo` file path: run `xppai xpo load "<file>"` first.
-- If user pastes raw XPO text: run `xppai xpo load-stdin --name "pasted.xpo"` with pasted content on stdin first.
-- If stdin piping is unavailable in the runtime: write pasted text to a temporary `.xpo` file and run `xppai xpo load "<temp-file>"`.
+Intake policy:
+- If user provides a new `.xpo` file path: open the local file directly and read only the object text needed for analysis.
+- If user pastes raw XPO text: analyze directly from pasted content.
 - If both a file path and pasted XPO text are present, prioritize the explicit file path.
-- If no new XPO input is provided, use cache-first discovery with `xppai xpo snapshot --json` once, then `xppai xpo read` only for selected objects; snapshot approval persists for the current Codex session and the same cache fingerprint.
-- Do not use `xppai xpo --help` for runtime discovery in this workflow.
-
-Validation rule:
-- Only write cache for pasted content when XPO is complete.
-- If pasted content is partial/incomplete, do not write cache; continue analysis directly from pasted text and state that cache import was skipped due to incomplete XPO input.
+- If no new XPO input is provided, use artifact text already present in the conversation context.
+- If local file access fails, request corrected path or pasted content and stop speculative analysis.
 
 ## XPO Intake State
 
 - If this skill is running standalone and XPO input is detected, run XPO intake before analysis.
-- If an orchestrator states `XPO intake already completed for this request`, do not run any XPO intake command again.
+- If an orchestrator states `XPO intake already completed for this request`, do not run XPO intake again.
 - Treat a newly provided XPO as replacing the active XPO analysis context for the current request.
-- Before running the intake command for a newly provided XPO, state that the active XPO cache context will be refreshed for this request.
-- Do not run unrelated shell commands to inspect files, search repositories, list directories, or discover context unless the user asked for that or the XPO load command failed and diagnosis is required.
+- State that direct local-file intake is being used for the request.
+- Do not run unrelated shell commands to inspect repositories or discover context unless the user asked for that or local file access failed and diagnosis is required.
 
 ## Rules for All XppAI Skills
 

@@ -28,13 +28,13 @@ test('AGENT.md includes AX 2009 scope and loop safety rule', () => {
   assert.match(content, /Do not exceed 3 investigation cycles unless explicitly requested/);
 });
 
-test('AGENT.md enforces analyze-first and constrained fallback policy', () => {
+test('AGENT.md enforces direct-file and constrained fallback policy', () => {
   const content = fs.readFileSync(AGENT_PATH, 'utf8');
-  assert.match(content, /analyze-\*/i);
+  assert.match(content, /inspect the local `.xpo` file directly/i);
   assert.match(content, /fallback/i);
   assert.match(content, /insufficient detail/i);
-  assert.match(content, /Path used:\s*analyze-first/i);
-  assert.match(content, /Fallback reason:\s*<failure\|missing detail>/i);
+  assert.match(content, /Path used:\s*direct-file/i);
+  assert.match(content, /Fallback reason:\s*<file access failure\|missing detail>/i);
 });
 
 test('AGENT.md references required skills', () => {
@@ -66,9 +66,9 @@ test('legacy SKILL.md references canonical AGENT.md and cycle limit', () => {
   assert.match(content, /Do not exceed 3 investigation cycles unless explicitly requested/);
 });
 
-test('legacy SKILL.md references analyze command family and avoids legacy snapshot path', () => {
+test('legacy SKILL.md references direct-file intake and avoids cache-first snapshot path', () => {
   const content = fs.readFileSync(SKILL_PATH, 'utf8');
-  assert.match(content, /analyze-load/i);
+  assert.match(content, /open the local `.xpo` file directly/i);
   assert.doesNotMatch(content, /xppai xpo snapshot --json/i);
 });
 

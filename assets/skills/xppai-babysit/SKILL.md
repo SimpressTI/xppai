@@ -15,27 +15,25 @@ Paste any AX 2009 artifact. This skill detects what it is, applies the correct s
 
 ## XPO Intake Before Classification
 
-If input is an XPO file path or pasted XPO text (object headers such as `CLASS #`, `TABLE #`, `FORM #`), load it first:
+If input is an XPO file path or pasted XPO text (object headers such as `CLASS #`, `TABLE #`, `FORM #`), intake it first:
 
-- File path: `xppai xpo analyze-load "<file>"`
-- Pasted text: `xppai xpo load-stdin --name "pasted.xpo"` with text on stdin
-- If pasted XPO is incomplete and load fails, continue classification/analysis from text and state cache import was skipped
+- File path: open the local `.xpo` file directly and read only required object text
+- Pasted text: analyze directly from pasted content
+- If file open fails, ask for corrected path or pasted content before classification
 - Run XPO intake at most once per user request.
-- If no new XPO is provided, use cache-first discovery with `xppai xpo analyze-snapshot` once, then `xppai xpo analyze-read` only for selected objects and do not reload; snapshot approval persists for the current Codex session and the same cache fingerprint.
 - After successful intake, pass this state to selected skills: `XPO intake already completed for this request`.
 - Selected skills must not run XPO intake again.
-- Do not use `xppai xpo --help` for runtime discovery in this workflow.
 
 ## Execution Decision Gate
 
 1. Confirm intake state is known (or run intake once).
-2. If this request is XPO-analysis, run `xppai xpo analyze-*` first.
-3. Fallback to direct cache/file inspection is allowed only if:
-   - analyze command failed, or
-   - analyze output is insufficient for required evidence detail.
+2. If this request is XPO-analysis, use direct local-file/pasted-text evidence first.
+3. Fallback inspection is allowed only if:
+   - file access failed, or
+   - available text is insufficient for required evidence detail.
 4. Record compliance markers in output:
-   - `Path used: analyze-first` or `Path used: fallback`
-   - if fallback used: `Fallback reason: <failure|missing detail> - <concrete detail>`
+   - `Path used: direct-file` or `Path used: fallback`
+   - if fallback used: `Fallback reason: <file access failure|missing detail> - <concrete detail>`
 
 ## Step 1 — Classify the Artifact
 

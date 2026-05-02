@@ -77,7 +77,7 @@ Quick reference for available skills and usage guidance.
 
 ## XPO Intake Behavior
 
-When an XPO file or pasted XPO text is provided, XppAI loads it into the active analysis context once before analysis. Orchestrator skills such as `xppai-papai` and `xppai-babysit` pass `XPO intake already completed for this request` to selected specialist skills so they do not import the same XPO again. When no new XPO is provided, use `xppai xpo snapshot --json` once to authorize the active cache fingerprint for the current Codex session, then `xppai xpo read` only for selected objects. Later `xppai` invocations in the same session reuse that snapshot approval for the same cache fingerprint. Specialist skills still perform XPO intake when used standalone.
+When an XPO file or pasted XPO text is provided, XppAI uses direct intake once before analysis. Orchestrator skills such as `xppai-papai` and `xppai-babysit` pass `XPO intake already completed for this request` to selected specialist skills so they do not repeat intake. For local-file input, skills read the `.xpo` content directly. For pasted input, skills analyze directly from pasted content. If local file access fails, request corrected path or pasted content.
 
 ### Unknown Artifact
 

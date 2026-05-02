@@ -1,6 +1,6 @@
 # XPO Cache Workflow
 
-XppAI can cache XPO content so repeated analysis and revision comparisons are consistent.
+Papai and related XppAI skills now prefer direct local-file XPO intake for analysis. This document covers the optional CLI cache workflow for repeatable command-line queries and revision comparisons.
 
 Default cache path:
 

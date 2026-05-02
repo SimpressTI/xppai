@@ -21,7 +21,7 @@ test('copilot adapter exports repository custom instructions layout', () => {
     assert.match(repoContent, /XppAI/);
     assert.match(repoContent, /AX 2009/);
     assert.match(repoContent, /xppai-papai/);
-    assert.match(repoContent, /xppai xpo snapshot --json/);
+    assert.match(repoContent, /open and analyze the local `.xpo` file directly/);
 
     const instructionsDir = path.join(tempDir, 'instructions');
     assert.ok(fs.statSync(instructionsDir).isDirectory(), 'instructions directory must be exported');

@@ -38,11 +38,10 @@ description: Use when asked what XppAI skills are available or how to use the Xp
 
 ## XPO Intake Quick Rules
 
-- New XPO file path provided: run `xppai xpo load "<file>"` before analysis skills
-- XPO pasted as text: run `xppai xpo load-stdin --name "pasted.xpo"` before analysis skills
-- If no new XPO is provided, use cache-first discovery: `xppai xpo snapshot --json`, then `xppai xpo read`; snapshot approval persists for the current Codex session and the same cache fingerprint
-- If pasted XPO is incomplete, cache load must be skipped and analysis proceeds from pasted text only
-- Do not use `xppai xpo --help` for runtime discovery in this workflow
+- New XPO file path provided: open the local `.xpo` directly before analysis skills
+- XPO pasted as text: analyze directly from pasted content
+- If local file access fails, ask for corrected path or pasted content
+- If no new XPO is provided, continue using artifact text already in conversation context
 
 ## Code Tag Rules
 

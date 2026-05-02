@@ -13,10 +13,10 @@ description: Use when reading unfamiliar X++ AX 2009 code — methods, classes, 
 
 - Run this gate only for XPO-analysis requests.
 - If an orchestrator already completed intake for this request, do not run intake again.
-- Use `xppai xpo analyze-*` first for discovery and evidence collection.
-- Direct cache/file fallback is allowed only when analyze fails or required detail is missing.
-- Output markers are mandatory: `Path used: analyze-first` or `Path used: fallback`.
-- If fallback is used, include: `Fallback reason: <failure|missing detail> - <concrete detail>`.
+- Use direct local-file/pasted-text evidence first for discovery and evidence collection.
+- Fallback inspection is allowed only when local file access fails or required detail is missing.
+- Output markers are mandatory: `Path used: direct-file` or `Path used: fallback`.
+- If fallback is used, include: `Fallback reason: <file access failure|missing detail> - <concrete detail>`.
 
 ## Overview
 

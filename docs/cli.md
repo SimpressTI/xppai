@@ -35,11 +35,11 @@ Supported install targets:
 
 ### `xppai xpo load <file> [--cache-dir <directory>]`
 
-Load an XPO file into cache.
+Load an XPO file into cache (optional CLI workflow).
 
 ### `xppai xpo load-stdin [--name <virtual-file-name>] [--cache-dir <directory>]`
 
-Load pasted XPO text from `stdin` into cache.
+Load pasted XPO text from `stdin` into cache (optional CLI workflow).
 
 The command validates that pasted XPO content appears complete before writing cache.
 
@@ -47,7 +47,7 @@ When loading a new revision for the same source path, the command warns that the
 
 ### `xppai xpo snapshot [--file <path>] [--type <T>] [--limit <n>] [--json] [--cache-dir <directory>]`
 
-Return a bounded inventory of the active XPO cache for discovery and record session authorization for that cache fingerprint.
+Return a bounded inventory of the active XPO cache and record session authorization for that cache fingerprint.
 
 ### `xppai xpo list [--type <T>] [--file <path>] [--json] [--cache-dir <directory>]`
 
@@ -76,3 +76,7 @@ Copy current cache content to another location. If destination is non-empty, con
 ### `xppai xpo export-modified --out <directory> [--file <source-xpo-file>] [--cache-dir <directory>]`
 
 Export one `.xpo` per changed/new object by comparing the latest and previous cache extracts for the same source file. Requires a matching snapshot-approved cache session.
+
+## Papai Direct-File Note
+
+`xppai-papai` and related XppAI skills now prefer direct local-file XPO intake (or pasted XPO text) for analysis flows. The cache commands above remain available for manual CLI workflows and advanced comparisons.

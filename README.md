@@ -31,7 +31,7 @@ XppAI gives LLMs a better operating manual for this world.
 - spotting risky changes before they hurt production
 - proposing minimal, safe fixes
 - exporting skills for different AI runtimes
-- loading and caching XPO files for repeatable analysis
+- reading XPO files directly for analysis
 
 ## Included Skills
 
@@ -72,17 +72,8 @@ npm install -g .
 ```bash
 xppai list
 xppai install --target all
-xppai xpo load <file>
-```
-
-Standard XPO analysis command family (recommended for stable approval reuse):
-
-```bash
-xppai xpo analyze-load <file>
-xppai xpo analyze-snapshot
-xppai xpo analyze-list --type Class
-xppai xpo analyze-read --type Class --name MyClass
-xppai xpo analyze-grep --contains "search-text"
+xppai xpo read --type Class --name MyClass --file <file>
+xppai xpo grep --contains "search-text" --file <file>
 ```
 
 Install one runtime at a time when needed:
@@ -110,7 +101,7 @@ xppai install --target copilot
 - Documentation index: [docs/README.md](./docs/README.md)
 - Skills guide: [docs/skills.md](./docs/skills.md)
 - CLI and command behavior: [docs/cli.md](./docs/cli.md)
-- XPO cache workflow: [docs/xpo-cache.md](./docs/xpo-cache.md)
+- XPO CLI workflow and notes: [docs/xpo-cache.md](./docs/xpo-cache.md)
 - Targets and installation: [docs/targets.md](./docs/targets.md)
 - Scope and constraints: [docs/scope.md](./docs/scope.md)
 

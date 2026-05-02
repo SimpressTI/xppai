@@ -25,11 +25,10 @@ test('xppai-init defines shared XPO intake state contract', () => {
   assert.match(content, /## XPO Intake State/);
   assert.match(content, /standalone/i);
   assert.match(content, /XPO intake already completed for this request/);
-  assert.match(content, /do not run any XPO intake command again/i);
+  assert.match(content, /do not run XPO intake again/i);
   assert.match(content, /Do not run unrelated shell commands/i);
   assert.match(content, /replacing the active XPO analysis context/i);
-  assert.match(content, /xppai xpo snapshot --json/i);
-  assert.match(content, /snapshot approval persists/i);
+  assert.match(content, /open the local file directly/i);
 });
 
 test('xppai-papai runs XPO intake once before orchestration', () => {
@@ -40,10 +39,9 @@ test('xppai-papai runs XPO intake once before orchestration', () => {
   assert.match(content, /pass .*completed intake state/i);
   assert.match(content, /must not run XPO intake again/i);
   assert.match(content, /Only select skills that serve the user's prompt goal/i);
-  assert.match(content, /analyze-\*/i);
-  assert.match(content, /Path used:\s*analyze-first/i);
-  assert.match(content, /Fallback reason:\s*<failure\|missing detail>/i);
-  assert.doesNotMatch(content, /xppai xpo snapshot --json/i);
+  assert.match(content, /direct local-file\/pasted-text evidence first/i);
+  assert.match(content, /Path used:\s*direct-file/i);
+  assert.match(content, /Fallback reason:\s*<file access failure\|missing detail>/i);
 });
 
 test('xppai-babysit runs XPO intake once before classification', () => {
@@ -53,20 +51,19 @@ test('xppai-babysit runs XPO intake once before classification', () => {
   assert.match(content, /XPO intake already completed for this request/);
   assert.match(content, /Selected skills must not run XPO intake again/i);
   assert.match(content, /Execution Decision Gate/i);
-  assert.match(content, /analyze-\*/i);
-  assert.match(content, /Path used:\s*analyze-first/i);
-  assert.match(content, /Fallback reason:\s*<failure\|missing detail>/i);
-  assert.doesNotMatch(content, /xppai xpo snapshot --json/i);
+  assert.match(content, /direct local-file\/pasted-text evidence first/i);
+  assert.match(content, /Path used:\s*direct-file/i);
+  assert.match(content, /Fallback reason:\s*<file access failure\|missing detail>/i);
 });
 
 for (const skill of SPECIALISTS) {
-  test(`${skill} enforces analyze-first path with controlled fallback`, () => {
+  test(`${skill} enforces direct-file path with controlled fallback`, () => {
     const content = readSkill(skill);
 
     assert.match(content, /Run the XPO Intake Gate only when/i);
     assert.match(content, /no orchestrator has already completed intake for this request/i);
-    assert.match(content, /analyze-\*/i);
-    assert.match(content, /Path used:\s*analyze-first/i);
-    assert.match(content, /Fallback reason:\s*<failure\|missing detail>/i);
+    assert.match(content, /direct local-file\/pasted-text evidence first/i);
+    assert.match(content, /Path used:\s*direct-file/i);
+    assert.match(content, /Fallback reason:\s*<file access failure\|missing detail>/i);
   });
 }

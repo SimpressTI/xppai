@@ -94,11 +94,15 @@ function updateTopIndex(cacheDir, entry) {
       payload = { files: [] };
     }
   }
+  const existingForPath = payload.files.filter(
+    (f) => nodePath.resolve(f.filePath) === nodePath.resolve(entry.filePath)
+  );
   payload.files = payload.files.filter(
     (f) => !(f.fileHash === entry.fileHash && nodePath.resolve(f.filePath) === nodePath.resolve(entry.filePath))
   );
   payload.files.push(entry);
   fs.writeFileSync(indexPath, JSON.stringify(payload, null, 2) + '\n', 'utf8');
+  return existingForPath.some((f) => f.fileHash !== entry.fileHash);
 }
 
 function loadFromRaw(flags, raw, sourcePath) {
@@ -133,7 +137,7 @@ function loadFromRaw(flags, raw, sourcePath) {
     byType[o.type]++;
   }
 
-  updateTopIndex(cacheDir, {
+  const replaced = updateTopIndex(cacheDir, {
     filePath: absSource,
     fileHash,
     loadedAt: extract.loadedAt,
@@ -142,6 +146,9 @@ function loadFromRaw(flags, raw, sourcePath) {
     extractPath,
   });
 
+  if (replaced) {
+    process.stdout.write(`warning: overwriting active cache entry for source: ${absSource}\n`);
+  }
   process.stdout.write(
     `loaded XPO: ${absSource}\n` +
     `cache dir: ${cacheDir}\n` +

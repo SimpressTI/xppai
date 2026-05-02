@@ -22,9 +22,11 @@ Before Step 1, check whether the artifact is XPO input (file path or pasted XPO 
 - For pasted XPO text: run `xppai xpo load-stdin --name "pasted.xpo"` with pasted text on stdin.
 - If pasted XPO is incomplete and cache load fails, continue analysis from provided text and mark cache import as skipped.
 - Run XPO intake at most once per user request.
+- If no new XPO is provided, use cache-first retrieval (`xppai xpo list`, `xppai xpo read`, `xppai xpo grep`) and do not reload.
 - After successful intake, record and pass this state to selected skills: `XPO intake already completed for this request`.
 - When applying selected skills, pass the completed intake state; selected skills must not run XPO intake again.
 - Do not run unrelated shell commands to inspect files, search repositories, list directories, or discover context unless the user asked for that or the XPO load command failed and diagnosis is required.
+- Do not use `xppai xpo --help` for runtime discovery in this workflow.
 
 ## How It Works
 

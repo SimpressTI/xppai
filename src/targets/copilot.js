@@ -27,7 +27,7 @@ function buildRepoInstructions(skillsDir) {
     '',
     'Prefer the dynamic entry skill `xppai-papai` for mixed or ambiguous artifacts. Use `xppai-babysit` when a predictable fixed workflow is better. Use specialist instructions from `.github/instructions/xppai-*.instructions.md` when the task matches their scope.',
     '',
-    'When input includes an XPO file path, run `xppai xpo load "<file>"` before analysis when the CLI is available. When input includes pasted XPO text, run `xppai xpo load-stdin --name "pasted.xpo"` and pass the pasted text on stdin. If cache loading is not possible, continue from the provided text and state that cache import was skipped.',
+    'When input includes a new XPO file path, run `xppai xpo load "<file>"` before analysis when the CLI is available. If no new XPO is provided, use cache-first retrieval with `xppai xpo list`, `xppai xpo read`, and `xppai xpo grep` instead of reloading. For pasted XPO text, run `xppai xpo load-stdin --name "pasted.xpo"` and pass text on stdin. If cache loading is not possible, continue from provided text and state cache import was skipped. Do not use `xppai xpo --help` for runtime discovery in this workflow.',
     '',
     'Available XppAI instruction files:',
     '',

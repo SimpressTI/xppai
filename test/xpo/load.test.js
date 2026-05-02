@@ -31,4 +31,6 @@ test('xpo load parses object types and writes extract json', () => {
   const extract = JSON.parse(fs.readFileSync(extractPath, 'utf8'));
   const types = extract.objects.map((o) => o.type);
   assert.deepEqual(types, ['Class', 'Table', 'Form']);
+  assert.match(extract.objects[0].content, /Class #MyClass/);
+  assert.ok(extract.objects[0].contentHash);
 });

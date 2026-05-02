@@ -589,10 +589,12 @@ Detect XPO from any of these:
 - Pasted content containing AX object headers like `CLASS #`, `TABLE #`, `FORM #`, `QUERY #`, `MAP #`, `VIEW #`, `JOB #`, `PROJECT #`
 
 Command policy:
-- If user provides or implies an `.xpo` file path: run `xppai xpo load "<file>"` first.
+- If user provides a new `.xpo` file path: run `xppai xpo load "<file>"` first.
 - If user pastes raw XPO text: run `xppai xpo load-stdin --name "pasted.xpo"` with pasted content on stdin first.
 - If stdin piping is unavailable in the runtime: write pasted text to a temporary `.xpo` file and run `xppai xpo load "<temp-file>"`.
 - If both a file path and pasted XPO text are present, prioritize the explicit file path.
+- If no new XPO input is provided, use cache-first inquiry commands: `xppai xpo list`, `xppai xpo read`, and `xppai xpo grep`.
+- Do not use `xppai xpo --help` for runtime discovery in this workflow.
 
 Validation rule:
 - Only write cache for pasted content when XPO is complete.

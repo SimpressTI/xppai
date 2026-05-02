@@ -43,6 +43,20 @@ Load pasted XPO text from `stdin` into cache.
 
 The command validates that pasted XPO content appears complete before writing cache.
 
+When loading a new revision for the same source path, the command warns that the active cache entry is being overwritten.
+
+### `xppai xpo list [--type <T>] [--file <path>] [--json] [--cache-dir <directory>]`
+
+List cached object inventory from the latest cached extract per source file.
+
+### `xppai xpo read --type <T> --name <N> [--file <path>] [--json] [--cache-dir <directory>]`
+
+Read one cached object (including code content) by type/name.
+
+### `xppai xpo grep --contains <text> [--type <T>] [--file <path>] [--limit <n>] [--json] [--cache-dir <directory>]`
+
+Search cached object content using case-insensitive text matching.
+
 ### `xppai xpo cache-use <directory>`
 
 Set active cache directory in user config.

@@ -9,10 +9,12 @@ Default cache path:
 ## Typical Flow
 
 1. Load the initial XPO revision.
-2. Run `xppai xpo snapshot --json` to discover cached objects once.
-3. Run `xppai xpo read` only for the objects you actually need in full.
+2. Run `xppai xpo snapshot --json` to authorize the active cache fingerprint for the current Codex session and discover cached objects once.
+3. Run `xppai xpo list`, `xppai xpo read`, `xppai xpo grep`, or `xppai xpo export-modified` only after that snapshot approval is in place.
 4. Load a new revision of the same source file only when you want to refresh active context.
 5. Export only changed/new objects.
+
+Snapshot approval persists for the same Codex session while the cache fingerprint remains unchanged.
 
 Example:
 

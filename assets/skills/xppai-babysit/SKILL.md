@@ -21,7 +21,7 @@ If input is an XPO file path or pasted XPO text (object headers such as `CLASS #
 - Pasted text: `xppai xpo load-stdin --name "pasted.xpo"` with text on stdin
 - If pasted XPO is incomplete and load fails, continue classification/analysis from text and state cache import was skipped
 - Run XPO intake at most once per user request.
-- If no new XPO is provided, use cache-first discovery with `xppai xpo snapshot --json` once, then `xppai xpo read` only for selected objects and do not reload.
+- If no new XPO is provided, use cache-first discovery with `xppai xpo snapshot --json` once, then `xppai xpo read` only for selected objects and do not reload; snapshot approval persists for the current Codex session and the same cache fingerprint.
 - After successful intake, pass this state to selected skills: `XPO intake already completed for this request`.
 - Selected skills must not run XPO intake again.
 - Do not use `xppai xpo --help` for runtime discovery in this workflow.

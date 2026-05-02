@@ -1,6 +1,7 @@
 'use strict';
 
 const { collectObjects, loadIndexOrExit, normalizeType, pickEntries } = require('./query-store');
+const { writeSessionAuth } = require('./session-auth');
 
 function preview(content, limit) {
   const text = String(content || '').replace(/\r?\n/g, '\\n');
@@ -8,7 +9,7 @@ function preview(content, limit) {
 }
 
 module.exports = function snapshot(flags, _args) {
-  const { cacheDir, files } = loadIndexOrExit(flags);
+  const { cacheDir, files, fingerprint } = loadIndexOrExit(flags);
   const entries = pickEntries(files, flags['--file']);
   const typeFilter = normalizeType(flags['--type']);
   const limit = Number.isFinite(Number(flags['--limit'])) ? Math.max(1, Number(flags['--limit'])) : 200;
@@ -26,6 +27,7 @@ module.exports = function snapshot(flags, _args) {
 
   const payload = {
     cacheDir,
+    cacheFingerprint: fingerprint,
     files: entries.map((entry) => ({
       filePath: entry.filePath,
       fileHash: entry.fileHash,
@@ -47,10 +49,20 @@ module.exports = function snapshot(flags, _args) {
   };
 
   if (flags['--json']) {
+    writeSessionAuth({
+      cacheDir,
+      cacheFingerprint: fingerprint,
+      approvedAt: new Date().toISOString(),
+    });
     process.stdout.write(JSON.stringify(payload, null, 2) + '\n');
     return;
   }
 
+  writeSessionAuth({
+    cacheDir,
+    cacheFingerprint: fingerprint,
+    approvedAt: new Date().toISOString(),
+  });
   process.stdout.write(
     `cache dir: ${payload.cacheDir}\n` +
     `files: ${payload.files.length}\n` +
@@ -58,4 +70,3 @@ module.exports = function snapshot(flags, _args) {
     `types: ${Object.keys(payload.byType).sort().join(', ')}\n`
   );
 };
-

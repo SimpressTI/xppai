@@ -10,15 +10,26 @@ const { classesVersion1, classesVersion2 } = require('../fixtures/xpo');
 
 test('xpo export-modified writes one xpo per changed object', () => {
   const tempRoot = mkdtemp('xppai-expmod-');
+  const tempLocal = path.join(tempRoot, 'local');
   const cacheDir = path.join(tempRoot, 'cache');
   const outDir = path.join(tempRoot, 'out');
   const xpoFile = path.join(tempRoot, 'objects.xpo');
 
   fs.writeFileSync(xpoFile, classesVersion1(), 'utf8');
-  runCli(['xpo', 'load', xpoFile, '--cache-dir', cacheDir]);
+  runCli(['xpo', 'load', xpoFile, '--cache-dir', cacheDir], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
+  runCli(['xpo', 'snapshot', '--cache-dir', cacheDir, '--json'], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
 
   fs.writeFileSync(xpoFile, classesVersion2(), 'utf8');
-  runCli(['xpo', 'load', xpoFile, '--cache-dir', cacheDir]);
+  runCli(['xpo', 'load', xpoFile, '--cache-dir', cacheDir], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
+  runCli(['xpo', 'snapshot', '--cache-dir', cacheDir, '--json'], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
 
   const out = runCli([
     'xpo',
@@ -29,7 +40,9 @@ test('xpo export-modified writes one xpo per changed object', () => {
     xpoFile,
     '--cache-dir',
     cacheDir,
-  ]);
+  ], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
   assert.match(out, /modified objects: 1/);
 
   const files = fs.readdirSync(outDir).sort();

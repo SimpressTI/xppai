@@ -2,10 +2,15 @@
 
 const fs = require('fs');
 const nodePath = require('path');
+const crypto = require('crypto');
 const { resolveCacheDir } = require('../../cache/paths');
 
 function readJson(path) {
   return JSON.parse(fs.readFileSync(path, 'utf8'));
+}
+
+function sha256(input) {
+  return crypto.createHash('sha256').update(String(input || '')).digest('hex');
 }
 
 function sortByLoadedAtAsc(entries) {
@@ -23,6 +28,7 @@ function loadIndexOrExit(flags) {
     process.exit(1);
   }
 
+  const indexRaw = fs.readFileSync(indexPath, 'utf8');
   const index = readJson(indexPath);
   const files = Array.isArray(index.files) ? index.files : [];
   if (!files.length) {
@@ -33,7 +39,7 @@ function loadIndexOrExit(flags) {
     process.exit(1);
   }
 
-  return { cacheDir, files };
+  return { cacheDir, files, index, indexPath, fingerprint: sha256(indexRaw) };
 }
 
 function latestEntriesByFile(files) {
@@ -111,5 +117,5 @@ module.exports = {
   loadIndexOrExit,
   normalizeType,
   pickEntries,
+  sha256,
 };
-

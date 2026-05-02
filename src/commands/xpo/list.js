@@ -1,6 +1,7 @@
 'use strict';
 
 const { collectObjects, loadIndexOrExit, normalizeType, pickEntries } = require('./query-store');
+const { requireSessionAuthOrExit } = require('./session-auth');
 
 function printText(cacheDir, entries, objects) {
   const byType = {};
@@ -25,7 +26,8 @@ function printText(cacheDir, entries, objects) {
 }
 
 module.exports = function list(flags, _args) {
-  const { cacheDir, files } = loadIndexOrExit(flags);
+  const { cacheDir, files, fingerprint } = loadIndexOrExit(flags);
+  requireSessionAuthOrExit({ cacheDir, fingerprint });
   const entries = pickEntries(files, flags['--file']);
   const typeFilter = normalizeType(flags['--type']);
 
@@ -65,4 +67,3 @@ module.exports = function list(flags, _args) {
 
   printText(cacheDir, entries, objects);
 };
-

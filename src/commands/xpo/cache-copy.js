@@ -4,6 +4,8 @@ const fs = require('fs');
 const nodePath = require('path');
 const readline = require('readline');
 const { resolveCacheDir } = require('../../cache/paths');
+const { loadIndexOrExit } = require('./query-store');
+const { requireSessionAuthOrExit } = require('./session-auth');
 
 function isNonEmptyDir(dir) {
   if (!fs.existsSync(dir)) return false;
@@ -53,6 +55,9 @@ module.exports = async function cacheCopy(flags, args) {
     process.stderr.write(`error: source cache path is not a directory: ${sourceDir}\n`);
     process.exit(1);
   }
+
+  const { fingerprint } = loadIndexOrExit(flags);
+  requireSessionAuthOrExit({ cacheDir: sourceDir, fingerprint });
 
   if (isNonEmptyDir(destDir)) {
     if (!skipPrompt) {

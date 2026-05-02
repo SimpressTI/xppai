@@ -1,6 +1,7 @@
 'use strict';
 
 const { collectObjects, loadIndexOrExit, normalizeType, pickEntries } = require('./query-store');
+const { requireSessionAuthOrExit } = require('./session-auth');
 
 function excerpt(content, needle, limit) {
   const text = String(content || '');
@@ -21,7 +22,8 @@ module.exports = function grep(flags, _args) {
 
   const type = normalizeType(flags['--type']);
   const limit = Number.isFinite(Number(flags['--limit'])) ? Math.max(1, Number(flags['--limit'])) : 50;
-  const { cacheDir, files } = loadIndexOrExit(flags);
+  const { cacheDir, files, fingerprint } = loadIndexOrExit(flags);
+  requireSessionAuthOrExit({ cacheDir, fingerprint });
   const entries = pickEntries(files, flags['--file']);
 
   let matches = collectObjects(entries).filter((o) =>
@@ -62,4 +64,3 @@ module.exports = function grep(flags, _args) {
   }
   process.stdout.write(out);
 };
-

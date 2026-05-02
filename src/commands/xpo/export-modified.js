@@ -3,6 +3,8 @@
 const fs = require('fs');
 const nodePath = require('path');
 const { resolveCacheDir } = require('../../cache/paths');
+const { loadIndexOrExit } = require('./query-store');
+const { requireSessionAuthOrExit } = require('./session-auth');
 
 function sanitize(name) {
   return String(name).replace(/[<>:"/\\|?*\x00-\x1F]/g, '_');
@@ -32,18 +34,8 @@ module.exports = function exportModified(flags, _args) {
   }
 
   const cacheDir = resolveCacheDir(flags);
-  const indexPath = nodePath.join(cacheDir, 'index.json');
-  if (!fs.existsSync(indexPath)) {
-    process.stderr.write(`error: cache index not found: ${indexPath}\n`);
-    process.exit(1);
-  }
-
-  const index = JSON.parse(fs.readFileSync(indexPath, 'utf8'));
-  const files = Array.isArray(index.files) ? index.files : [];
-  if (!files.length) {
-    process.stderr.write('error: cache index has no loaded XPO entries\n');
-    process.exit(1);
-  }
+  const { files, fingerprint } = loadIndexOrExit(flags);
+  requireSessionAuthOrExit({ cacheDir, fingerprint });
 
   const requestedFile = flags['--file'] ? nodePath.resolve(String(flags['--file'])) : null;
   const { latest, previous, targetPath } = pickTargetEntries(files, requestedFile);

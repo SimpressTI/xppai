@@ -47,19 +47,19 @@ When loading a new revision for the same source path, the command warns that the
 
 ### `xppai xpo snapshot [--file <path>] [--type <T>] [--limit <n>] [--json] [--cache-dir <directory>]`
 
-Return a bounded inventory of the active XPO cache for discovery.
+Return a bounded inventory of the active XPO cache for discovery and record session authorization for that cache fingerprint.
 
 ### `xppai xpo list [--type <T>] [--file <path>] [--json] [--cache-dir <directory>]`
 
-List cached object inventory from the latest cached extract per source file.
+List cached object inventory from the latest cached extract per source file. Requires a matching snapshot-approved cache session.
 
 ### `xppai xpo read --type <T> --name <N> [--file <path>] [--json] [--cache-dir <directory>]`
 
-Read one cached object (including code content) by type/name.
+Read one cached object (including code content) by type/name. Requires a matching snapshot-approved cache session.
 
 ### `xppai xpo grep --contains <text> [--type <T>] [--file <path>] [--limit <n>] [--json] [--cache-dir <directory>]`
 
-Search cached object content using case-insensitive text matching.
+Search cached object content using case-insensitive text matching. Requires a matching snapshot-approved cache session.
 
 ### `xppai xpo cache-use <directory>`
 
@@ -75,4 +75,4 @@ Copy current cache content to another location. If destination is non-empty, con
 
 ### `xppai xpo export-modified --out <directory> [--file <source-xpo-file>] [--cache-dir <directory>]`
 
-Export one `.xpo` per changed/new object by comparing the latest and previous cache extracts for the same source file.
+Export one `.xpo` per changed/new object by comparing the latest and previous cache extracts for the same source file. Requires a matching snapshot-approved cache session.

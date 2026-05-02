@@ -19,6 +19,10 @@ test('xpo list/read/grep query cached objects without reload', () => {
     env: { ...process.env, LOCALAPPDATA: tempLocal },
   });
 
+  runCli(['xpo', 'snapshot', '--cache-dir', cacheDir, '--json'], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
+
   const listOut = runCli(['xpo', 'list', '--cache-dir', cacheDir], {
     env: { ...process.env, LOCALAPPDATA: tempLocal },
   });
@@ -52,6 +56,9 @@ test('xpo read fails on ambiguous object names without --file', () => {
   runCli(['xpo', 'load', fileB, '--cache-dir', cacheDir], {
     env: { ...process.env, LOCALAPPDATA: tempLocal },
   });
+  runCli(['xpo', 'snapshot', '--cache-dir', cacheDir, '--json'], {
+    env: { ...process.env, LOCALAPPDATA: tempLocal },
+  });
 
   assert.throws(() => {
     runCli(['xpo', 'read', '--type', 'Class', '--name', 'A', '--cache-dir', cacheDir], {
@@ -77,4 +84,3 @@ test('xpo load warns when overwriting active cache entry for same source path', 
   });
   assert.match(out, /warning: overwriting active cache entry for source/);
 });
-

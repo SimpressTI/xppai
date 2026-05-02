@@ -1,6 +1,7 @@
 'use strict';
 
 const load = require('./load');
+const loadStdin = require('./load-stdin');
 const cacheCopy = require('./cache-copy');
 const cacheUse = require('./cache-use');
 const cacheShow = require('./cache-show');
@@ -11,6 +12,7 @@ module.exports = function xpo(flags, args) {
   const rest = args.slice(1);
 
   if (sub === 'load') return load(flags, rest);
+  if (sub === 'load-stdin') return loadStdin(flags, rest);
   if (sub === 'cache-copy') return cacheCopy(flags, rest);
   if (sub === 'cache-use') return cacheUse(flags, rest);
   if (sub === 'cache-show') return cacheShow(flags, rest);
@@ -20,6 +22,7 @@ module.exports = function xpo(flags, args) {
     'error: unknown xpo subcommand\n' +
     'usage:\n' +
     '  xppai xpo load <file> [--cache-dir <dir>]\n' +
+    '  xppai xpo load-stdin [--name <virtual-file-name>] [--cache-dir <dir>]\n' +
     '  xppai xpo cache-copy <dest> [--yes] [--cache-dir <dir>]\n' +
     '  xppai xpo cache-use <dir>\n' +
     '  xppai xpo cache-show [--cache-dir <dir>]\n' +

@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const { runCli } = require('../helpers/cli');
 const { mkdtemp } = require('../helpers/tmp');
-const { xpoLoadSample } = require('../fixtures/xpo');
+const { xpoLoadSampleFragment } = require('../fixtures/xpo');
 
 test('xpo load parses object types and writes extract json', () => {
   const tempRoot = mkdtemp('xppai-xpo-');
@@ -14,7 +14,7 @@ test('xpo load parses object types and writes extract json', () => {
   const xpoFile = path.join(tempRoot, 'sample.xpo');
   const cacheDir = path.join(tempRoot, 'cache');
 
-  fs.writeFileSync(xpoFile, xpoLoadSample(), 'utf8');
+  fs.writeFileSync(xpoFile, xpoLoadSampleFragment(), 'utf8');
 
   const out = runCli(['xpo', 'load', xpoFile, '--cache-dir', cacheDir], {
     env: { ...process.env, LOCALAPPDATA: tempLocal },

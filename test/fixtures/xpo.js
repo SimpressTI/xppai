@@ -1,6 +1,7 @@
 'use strict';
 
-function xpoLoadSample() {
+// Synthetic, non-production XPO fragment used for parser tests.
+function xpoLoadSampleFragment() {
   return [
     'Class #MyClass',
     'METHODS',
@@ -12,6 +13,25 @@ function xpoLoadSample() {
     '  CustAccount',
     'Form #SalesTable',
     'DESIGN',
+  ].join('\n');
+}
+
+// Synthetic, non-production XPO with explicit END* closers used for completeness-gated stdin tests.
+function xpoLoadSampleComplete() {
+  return [
+    'Class #MyClass',
+    'METHODS',
+    '  public void run()',
+    '  {',
+    '  }',
+    'ENDCLASS',
+    'Table #CustTable',
+    'FIELDS',
+    '  CustAccount',
+    'ENDTABLE',
+    'Form #SalesTable',
+    'DESIGN',
+    'ENDFORM',
   ].join('\n');
 }
 
@@ -50,7 +70,8 @@ function classesVersion2() {
 }
 
 module.exports = {
-  xpoLoadSample,
+  xpoLoadSampleFragment,
+  xpoLoadSampleComplete,
   classesVersion1,
   classesVersion2,
 };

@@ -20,7 +20,7 @@
     "skills"
   ],
   "bin": {
-    "xppai": "./bin/xppai.js"
+    "xppai": "bin/xppai.js"
   },
   "files": [
     "assets/",

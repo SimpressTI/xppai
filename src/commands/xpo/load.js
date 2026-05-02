@@ -59,6 +59,30 @@ function parseObjects(lines) {
   return objects;
 }
 
+function isLikelyCompleteXpo(raw, objects) {
+  if (!objects.length) return false;
+  const expectedClosers = {
+    Class: 'ENDCLASS',
+    Table: 'ENDTABLE',
+    Form: 'ENDFORM',
+    Query: 'ENDQUERY',
+    Map: 'ENDMAP',
+    View: 'ENDVIEW',
+    Enum: 'ENDENUM',
+    Job: 'ENDJOB',
+    Project: 'ENDPROJECT',
+  };
+
+  for (const obj of objects) {
+    const closer = expectedClosers[obj.type];
+    if (!closer) continue;
+    const lines = String(obj.content || '').split(/\r?\n/).map((l) => l.trim().toUpperCase());
+    if (!lines.includes(closer)) return false;
+  }
+
+  return true;
+}
+
 function updateTopIndex(cacheDir, entry) {
   const indexPath = nodePath.join(cacheDir, 'index.json');
   let payload = { files: [] };
@@ -77,29 +101,17 @@ function updateTopIndex(cacheDir, entry) {
   fs.writeFileSync(indexPath, JSON.stringify(payload, null, 2) + '\n', 'utf8');
 }
 
-module.exports = function load(flags, args) {
-  const fileArg = args[0];
-  if (!fileArg) {
-    process.stderr.write('error: xppai xpo load requires <file>\n');
-    process.exit(1);
-  }
-
-  const absFile = nodePath.resolve(fileArg);
-  if (!fs.existsSync(absFile) || !fs.statSync(absFile).isFile()) {
-    process.stderr.write(`error: file not found: ${absFile}\n`);
-    process.exit(1);
-  }
-
+function loadFromRaw(flags, raw, sourcePath) {
   const cacheDir = resolveCacheDir(flags);
   ensureCacheStructure(cacheDir);
 
-  const raw = fs.readFileSync(absFile, 'utf8');
+  const absSource = nodePath.resolve(sourcePath);
   const lines = raw.split(/\r?\n/);
   const fileHash = sha256(raw);
   const objects = parseObjects(lines);
 
   const extract = {
-    filePath: absFile,
+    filePath: absSource,
     fileHash,
     loadedAt: new Date().toISOString(),
     objectCount: objects.length,
@@ -122,7 +134,7 @@ module.exports = function load(flags, args) {
   }
 
   updateTopIndex(cacheDir, {
-    filePath: absFile,
+    filePath: absSource,
     fileHash,
     loadedAt: extract.loadedAt,
     objectCount: extract.objectCount,
@@ -131,8 +143,33 @@ module.exports = function load(flags, args) {
   });
 
   process.stdout.write(
-    `loaded XPO: ${absFile}\n` +
+    `loaded XPO: ${absSource}\n` +
     `cache dir: ${cacheDir}\n` +
     `objects: ${extract.objectCount}\n`
   );
+}
+
+function loadFromFile(flags, fileArg) {
+  if (!fileArg) {
+    process.stderr.write('error: xppai xpo load requires <file>\n');
+    process.exit(1);
+  }
+
+  const absFile = nodePath.resolve(fileArg);
+  if (!fs.existsSync(absFile) || !fs.statSync(absFile).isFile()) {
+    process.stderr.write(`error: file not found: ${absFile}\n`);
+    process.exit(1);
+  }
+
+  const raw = fs.readFileSync(absFile, 'utf8');
+  return loadFromRaw(flags, raw, absFile);
+}
+
+module.exports = function load(flags, args) {
+  return loadFromFile(flags, args[0]);
 };
+
+module.exports.loadFromRaw = loadFromRaw;
+module.exports.loadFromFile = loadFromFile;
+module.exports.parseObjects = parseObjects;
+module.exports.isLikelyCompleteXpo = isLikelyCompleteXpo;

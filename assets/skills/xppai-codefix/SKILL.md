@@ -65,13 +65,13 @@ Unknown overrides: verify AOT → Tax → right-click → Add-ins → Used by
 All overrides must receive the same parameter change.
 ```
 
-**3. SPS code documentation tags**
+**3. Code documentation tags (Tag ID format)**
 
 Before generating any fix code, you MUST collect the three tag fields. Do this in a single message:
 
 ```
-Before I write the fix, I need three things for the SPS tags:
-1. tagId (e.g. SPS)
+Before I write the fix, I need three things for the code tags:
+1. tagId (e.g. US)
 2. projectId (e.g. US_122249)
 3. devName
 4. Date: <today's date in DD/MM/YYYY — use system date>
@@ -108,10 +108,10 @@ Always produce output in this exact structure:
      Object: <ClassName / TableName / FormName>
      Method: <methodName>
      Signature change: Yes / No
-   SPS tag required: Yes — //<TagId - ProjectId - DD/MM/YYYY - DevName> / No
+   Tag ID required: Yes — //<TagId - ProjectId - DD/MM/YYYY - DevName> / No
    Then: Before / After diff or inline replacement.
    AX 2009 compatible X++ only.
-   Wrap all changed lines in SPS tags if applicable.
+   Wrap all changed lines in Tag ID blocks if applicable.
 
 4. Why This Fix Is the Safest Option
    Why this is minimal, why alternatives were rejected.
@@ -239,5 +239,5 @@ salesParm.calcTax();
 | Adding `firstOnly` to a select that returns multiple rows | Verify cardinality first — wrong fix if multiple rows expected |
 | Assuming refresh() removal is safe | Check if downstream display methods depend on the refresh signal |
 | Proposing a signature change without checking subclasses | Always check AOT for overrides — every subclass that overrides must be updated |
-| Writing fix code without SPS tags | All new/modified SPS code must be wrapped in `//<SPS ...>` `//</SPS ...>` tags |
+| Writing fix code without Tag ID blocks | All new/modified tagged code must be wrapped in `//<TagId - ProjectId - DD/MM/YYYY - DevName>` `//</TagId - ProjectId - DD/MM/YYYY - DevName>` blocks |
 | Saying "add to the method" without naming the object | Always name the exact class, table, or form and the method |

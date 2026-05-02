@@ -1,0 +1,7 @@
+.claude/
+reports/
+node_modules/
+coverage/
+*.xpo
+.env
+.env.*

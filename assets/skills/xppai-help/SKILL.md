@@ -35,3 +35,19 @@ description: Use when asked what XppAI skills are available or how to use the Xp
 **Need a fix?** → `xppai-codefix`
 
 **Something smells architecturally wrong?** → `xppai-architect`
+
+## XPO Intake Quick Rules
+
+- XPO file path provided: run `xppai xpo load "<file>"` before analysis skills
+- XPO pasted as text: run `xppai xpo load-stdin --name "pasted.xpo"` before analysis skills
+- If pasted XPO is incomplete, cache load must be skipped and analysis proceeds from pasted text only
+
+## Code Tag Rules
+
+- When fix output requires code tags, use `Tag ID` terminology (not SPS-specific wording).
+- Required fields for tagged fixes: `Tag ID`, `Project ID`, `Dev Name`, and current date (`DD/MM/YYYY`).
+
+## Commit Safety Rules
+
+- Never include real customer XPO files or generated analysis reports in repository commits.
+- Keep local runtime/config folders out of commits (for example `.claude/` and generated `reports/` output).

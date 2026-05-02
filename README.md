@@ -1,213 +1,109 @@
 # XppAI
 
-LLM-runtime-agnostic X++ and Microsoft Dynamics AX 2009 skill suite, packaged as an installable CLI.
+**XppAI is an LLM-runtime-agnostic skill suite for X++ and Microsoft Dynamics AX 2009.**
 
-XppAI bundles a curated set of AX 2009 / X++ skills and lets you:
+It packages a curated set of AX 2009 / X++ skills into an installable CLI, so you can bring structured, senior-style analysis to old-school ERP codebases without locking yourself into one specific AI runtime.
 
-- list bundled skills
-- locate the installed skill bundle
-- export skills for a target runtime
-- install skills into supported runtimes
-- load and cache XPO files
+Because yes: AX 2009 code still exists, it still runs businesses, and sometimes it needs more than "just ask the AI".
 
-## Requirements
+XppAI helps LLM agents understand AX 2009 code with better context, safer assumptions, and more production-aware behavior.
+
+## Author
+
+Created by **Roberta Freitas Oliveira** — **15+ years Microsoft ERP Specialist**  
+LinkedIn: [linkedin.com/in/rfreitas90](https://www.linkedin.com/in/rfreitas90/)
+
+## Why XppAI?
+
+Modern AI tools are great at coding.
+
+AX 2009 is not modern.
+
+X++ has its own patterns, traps, conventions, transaction behaviors, localization blocks, posting flows, and "do not touch this casually" zones.
+
+XppAI gives LLMs a better operating manual for this world.
+
+## What It Helps With
+
+- understanding unfamiliar X++ objects
+- analyzing profiler traces and stack traces
+- reviewing posting flows
+- spotting risky changes before they hurt production
+- proposing minimal, safe fixes
+- exporting skills for different AI runtimes
+- loading and caching XPO files for repeatable analysis
+
+## Included Skills
+
+| Skill | Purpose |
+|---|---|
+| `xppai-papai` | **Main** dynamic senior orchestrator for mixed or complex artifacts |
+| `xppai-babysit` | **Main** structured static orchestrator for predictable, labeled analysis |
+| `xppai-init` | Shared AX 2009 foundation and guardrails |
+| `xppai-explain` | Explains unfamiliar methods, classes, forms, and tables |
+| `xppai-stack` | Analyzes profiler traces and stack traces |
+| `xppai-codefix` | Proposes minimal, safe, production-ready fixes |
+| `xppai-architect` | Reviews code for architectural weaknesses and design gaps |
+| `xppai-posting` | Analyzes FormLetter posting flows and transaction behavior |
+| `xppai-risk` | Assesses change risk before modifying code |
+| `xppai-help` | General helper and entry guidance |
+| `xppai-exportxpo` | Generates a ready-to-paste X++ job for exporting AOT objects to XPO files |
+
+## Quick Start
+
+### Requirements
 
 - Node.js 18 or newer
 
-## Install
-
-### Global install from npm
+### Install
 
 ```bash
 npm install -g xppai
 ```
 
-### Local install from source
+Or from source:
 
 ```bash
 npm install -g .
 ```
 
-## CLI
-
-### List bundled skills
+### First Commands
 
 ```bash
 xppai list
-```
-
-Example output:
-
-```
-xppai-architect
-xppai-babysit
-xppai-codefix
-xppai-explain
-xppai-help
-xppai-init
-xppai-papai
-xppai-posting
-xppai-risk
-xppai-stack
-```
-
-### Show installed asset path
-
-```bash
-xppai path
-```
-
-### Export skills for a target
-
-```bash
-xppai export --target <target> --out <directory>
-```
-
-Example:
-
-```bash
-xppai export --target generic --out ./out/skills
-```
-
-### Install into a supported target runtime
-
-```bash
 xppai install --target <target>
+xppai xpo load <file>
 ```
 
-Optional symlink mode:
-
-```bash
-xppai install --target <target> --mode symlink
-```
-
-### Load an XPO file into cache
-
-```bash
-xppai xpo load <file> [--cache-dir <directory>]
-```
-
-Default cache location is user-local:
-
-`%LOCALAPPDATA%\xppai\cache\xpo\`
-
-### Set active XPO cache directory
-
-```bash
-xppai xpo cache-use <directory>
-```
-
-### Copy XPO cache to another directory
-
-```bash
-xppai xpo cache-copy <destination> [--yes] [--cache-dir <directory>]
-```
-
-If destination has existing content, xppai warns that all content will be erased and replaced, and asks for confirmation unless `--yes` is provided.
-
-### Show active/resolved XPO cache directory
-
-```bash
-xppai xpo cache-show [--cache-dir <directory>]
-```
-
-### Export one XPO per modified object from cache
-
-```bash
-xppai xpo export-modified --out <directory> [--file <source-xpo-file>] [--cache-dir <directory>]
-```
-
-Behavior:
-- Always generates one `.xpo` file per object.
-- Compares latest cached version against previous cached version of the same source XPO file.
-- Exports only changed/new objects.
-
-Example (single class object source file):
-
-```bash
-xppai xpo load "C:\Users\Roberta\Desktop\Class_PurchCalcTax_Invoice.xpo"
-# ...load updated revision of the same file again...
-xppai xpo export-modified --out "C:\Users\Roberta\Desktop\xpo_out" --file "C:\Users\Roberta\Desktop\Class_PurchCalcTax_Invoice.xpo"
-```
-
-Output files are always per object, for example:
-
-`Class_PurchCalcTax_Invoice.xpo`
-
-## Supported targets
+## Supported Targets
 
 ### Native targets
 
-These consume the packaged skill directories directly:
-
-- claude
-- codex
+- `claude`
+- `codex`
 
 ### Export-only targets
 
-These are adapted during export and do not currently define a default install location:
+- `copilot`
+- `generic`
 
-- copilot
-- generic
+## Learn More
 
-## Canonical asset format
-
-The canonical packaged source is:
-
-```
-assets/skills/**/SKILL.md
-```
-
-XppAI keeps SKILL.md as the source of truth and uses target adapters to export or install the bundle for different runtimes.
-
-## Included skills
-
-| Skill           | Purpose                                                   |
-|-----------------|-----------------------------------------------------------|
-| xppai-init      | Shared AX 2009 foundation and guardrails                  |
-| xppai-explain   | Explain unfamiliar methods, classes, forms, and tables    |
-| xppai-stack     | Analyze profiler traces and stack traces                  |
-| xppai-codefix   | Propose minimal, safe, production-ready fixes             |
-| xppai-architect | Review code for architectural weaknesses and design gaps  |
-| xppai-posting   | Analyze FormLetter posting flows and transaction behavior |
-| xppai-risk      | Assess change risk before modifying code                  |
-| xppai-babysit   | Structured multi-skill static analysis                    |
-| xppai-papai     | Dynamic senior-style orchestration and synthesis          |
-| xppai-help      | General helper and entry guidance                         |
-
-## Project scope
-
-XppAI is focused on:
-
-- Microsoft Dynamics AX 2009
-- X++
-- performance analysis
-- bug analysis
-- posting flow analysis
-- change-risk assessment
-- safe production-oriented fixes
-
-## Constraints
-
-- AX 2009 and X++ only
-- no D365 / Finance & Operations scope
-- localization blocks such as `<GBR>`, `<GIN>`, `<GJP>`, `<GSA>`, and `<GTH>` should not be modified unless explicitly requested
-- skills are intended to preserve existing logic and favor minimal, safe changes
-
-## Development
-
-Run tests:
-
-```bash
-npm test
-```
-
-Pack locally:
-
-```bash
-npm pack
-```
+- Documentation index: [docs/README.md](./docs/README.md)
+- Skills guide: [docs/skills.md](./docs/skills.md)
+- CLI and command behavior: [docs/cli.md](./docs/cli.md)
+- XPO cache workflow: [docs/xpo-cache.md](./docs/xpo-cache.md)
+- Targets and installation: [docs/targets.md](./docs/targets.md)
+- Scope and constraints: [docs/scope.md](./docs/scope.md)
 
 ## Repository
 
 GitHub: [betaxD/xppai](https://github.com/betaxD/xppai)
+
+## Status
+
+XppAI is built for people who still need to reason about AX 2009 seriously.
+
+It will not make legacy ERP magically simple.
+
+But it can make your AI assistant less clueless before it touches the code.

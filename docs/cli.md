@@ -1,0 +1,51 @@
+# CLI Reference
+
+XppAI exposes a small command set focused on skill packaging and XPO analysis workflows.
+
+## Core Commands
+
+### `xppai list`
+
+Print bundled skill names.
+
+### `xppai path`
+
+Print the installed path of packaged skills.
+
+### `xppai export --target <target> --out <directory>`
+
+Export skills for a target runtime into a directory.
+
+### `xppai install --target <target> [--mode symlink]`
+
+Install skills into a target runtime.
+
+Use `--mode symlink` during development when you want local skill edits to reflect without repeated copy operations.
+
+## XPO Commands
+
+### `xppai xpo load <file> [--cache-dir <directory>]`
+
+Load an XPO file into cache.
+
+### `xppai xpo load-stdin [--name <virtual-file-name>] [--cache-dir <directory>]`
+
+Load pasted XPO text from `stdin` into cache.
+
+The command validates that pasted XPO content appears complete before writing cache.
+
+### `xppai xpo cache-use <directory>`
+
+Set active cache directory in user config.
+
+### `xppai xpo cache-show [--cache-dir <directory>]`
+
+Show resolved cache path and source (flag, user config, env, or default).
+
+### `xppai xpo cache-copy <destination> [--yes] [--cache-dir <directory>]`
+
+Copy current cache content to another location. If destination is non-empty, confirmation is required unless `--yes` is passed.
+
+### `xppai xpo export-modified --out <directory> [--file <source-xpo-file>] [--cache-dir <directory>]`
+
+Export one `.xpo` per changed/new object by comparing the latest and previous cache extracts for the same source file.

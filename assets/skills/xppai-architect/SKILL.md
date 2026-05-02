@@ -49,7 +49,7 @@ Localized code is owned by Microsoft/partner localization teams. It cannot be mo
 - Do not suggest caching `TaxParameters::find()` inside `<GIN>` blocks
 - Do not propose refactoring patterns that require touching localization code
 - If a performance problem originates inside a localization block, flag it as **out of scope — localized code** and move on
-- Only analyze and recommend changes to SPS custom code, standard code, and form-level methods outside localization tags
+- Only analyze and recommend changes to tagged custom code, standard code, and form-level methods outside localization tags
 
 ## When Reviewing, Actively Look For
 

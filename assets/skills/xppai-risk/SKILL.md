@@ -78,7 +78,7 @@ Always produce output in this exact structure:
 | Called from `validateWrite` | Blocks all saves if behavior changes unexpectedly |
 | Calls `calcTax()` or `PurchTotals.calc()` | Total recalculation cascades — correctness and performance risk |
 | No clear single caller | Reuse is hidden — unknown regression surface |
-| Old SPS customization with no comments | Intent is unclear — behavior may be non-obvious |
+| Old tagged customization with no comments | Intent is unclear — behavior may be non-obvious |
 | `ttsBegin` scope spans the method | Transaction boundary change = potential data integrity issue |
 
 ## Risk Level Reference

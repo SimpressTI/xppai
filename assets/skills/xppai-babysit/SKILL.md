@@ -11,6 +11,14 @@ description: Use when given any X++ AX 2009 artifact — stack trace, method, cl
 
 Paste any AX 2009 artifact. This skill detects what it is, applies the correct skill sequence, and produces clearly labeled sections — one per skill applied. No decisions required from the user.
 
+## XPO Intake Before Classification
+
+If input is an XPO file path or pasted XPO text (object headers such as `CLASS #`, `TABLE #`, `FORM #`), load it first:
+
+- File path: `xppai xpo load "<file>"`
+- Pasted text: `xppai xpo load-stdin --name "pasted.xpo"` with text on stdin
+- If pasted XPO is incomplete and load fails, continue classification/analysis from text and state cache import was skipped
+
 ## Step 1 — Classify the Artifact
 
 Read the artifact and identify its type. Use the first match:

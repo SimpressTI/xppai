@@ -11,6 +11,14 @@ description: Use when given any X++ AX 2009 artifact and you need an intelligent
 
 Senior AX 2009 analyst that reads any artifact, reasons about what's actually going on, decides which lenses to apply, and produces a practical assessment. Not a fixed pipeline — thinks before acting.
 
+## XPO Intake Before Analysis
+
+Before Step 1, check whether the artifact is XPO input (file path or pasted XPO text with object headers like `CLASS #`, `TABLE #`, `FORM #`).
+
+- For XPO file path: run `xppai xpo load "<file>"`
+- For pasted XPO text: run `xppai xpo load-stdin --name "pasted.xpo"` with pasted text on stdin
+- If pasted XPO is incomplete and cache load fails, continue analysis from provided text and mark cache import as skipped
+
 ## How It Works
 
 Unlike `xppai-babysit` (which follows a static table), XppAI Papai reasons dynamically:

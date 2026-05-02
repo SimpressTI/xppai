@@ -8,7 +8,7 @@ module.exports = {
   id: 'codex',
 
   resolveInstallDir(_opts) {
-    return nodePath.join(os.homedir(), '.agents', 'skills');
+    return nodePath.join(os.homedir(), '.codex', 'skills');
   },
 
   listOwnedEntries(skillsDir) {

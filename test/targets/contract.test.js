@@ -2,9 +2,10 @@
 
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
+const nodePath = require('path');
 
 const ADAPTER_NAMES = ['claude', 'codex', 'copilot', 'generic'];
-const INSTALLABLE = new Set(['claude', 'codex']);
+const INSTALLABLE = new Set(['claude', 'codex', 'copilot']);
 
 for (const name of ADAPTER_NAMES) {
   test(`adapter ${name}: exports required methods`, () => {
@@ -27,3 +28,33 @@ for (const name of ADAPTER_NAMES) {
     }
   });
 }
+
+test('adapter codex: installs into ~/.codex/skills', () => {
+  const adapter = require('../../src/targets/codex');
+  const result = adapter.resolveInstallDir({});
+  assert.equal(
+    result,
+    nodePath.join(require('os').homedir(), '.codex', 'skills'),
+    'codex.resolveInstallDir() must target ~/.codex/skills'
+  );
+});
+
+test('adapter claude: installs into ~/.claude/skills', () => {
+  const adapter = require('../../src/targets/claude');
+  const result = adapter.resolveInstallDir({});
+  assert.equal(
+    result,
+    nodePath.join(require('os').homedir(), '.claude', 'skills'),
+    'claude.resolveInstallDir() must target ~/.claude/skills'
+  );
+});
+
+test('adapter copilot: installs into the current repository .github directory', () => {
+  const adapter = require('../../src/targets/copilot');
+  const result = adapter.resolveInstallDir({});
+  assert.equal(
+    result,
+    nodePath.join(process.cwd(), '.github'),
+    'copilot.resolveInstallDir() must target the current repository .github directory'
+  );
+});

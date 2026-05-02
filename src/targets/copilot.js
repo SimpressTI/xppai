@@ -5,24 +5,57 @@ const fs = require('fs');
 const fsHelpers = require('../fs');
 
 function stripFrontmatter(content) {
-  if (!content.startsWith('---')) return content;
-  const end = content.indexOf('\n---', 3);
-  if (end === -1) return content;
-  return content.slice(end + 4).trimStart();
+  return content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '').trimStart();
+}
+
+function skillDirs(skillsDir) {
+  return fs.readdirSync(skillsDir)
+    .filter(name => fs.statSync(nodePath.join(skillsDir, name)).isDirectory())
+    .sort();
+}
+
+function readDescription(content) {
+  const match = content.match(/^---\r?\n[\s\S]*?\ndescription:\s*(.+?)\r?\n[\s\S]*?\r?\n---/);
+  return match ? match[1].trim().replace(/^["']|["']$/g, '') : '';
+}
+
+function buildRepoInstructions(skillsDir) {
+  const lines = [
+    '# XppAI Copilot Instructions',
+    '',
+    'Use XppAI guidance when working with X++ or Microsoft Dynamics AX 2009 code, XPO exports, posting flows, profiler traces, stack traces, or AX change-risk analysis.',
+    '',
+    'Prefer the dynamic entry skill `xppai-papai` for mixed or ambiguous artifacts. Use `xppai-babysit` when a predictable fixed workflow is better. Use specialist instructions from `.github/instructions/xppai-*.instructions.md` when the task matches their scope.',
+    '',
+    'When input includes an XPO file path, run `xppai xpo load "<file>"` before analysis when the CLI is available. When input includes pasted XPO text, run `xppai xpo load-stdin --name "pasted.xpo"` and pass the pasted text on stdin. If cache loading is not possible, continue from the provided text and state that cache import was skipped.',
+    '',
+    'Available XppAI instruction files:',
+    '',
+  ];
+
+  for (const name of skillDirs(skillsDir)) {
+    const skillFile = nodePath.join(skillsDir, name, 'SKILL.md');
+    const content = fs.readFileSync(skillFile, 'utf8');
+    const description = readDescription(content);
+    lines.push(`- \`${name}\`: ${description || 'XppAI instruction set.'}`);
+  }
+
+  lines.push('');
+  return lines.join('\n');
 }
 
 module.exports = {
   id: 'copilot',
 
-  resolveInstallDir(_opts) {
-    return null;
+  resolveInstallDir(opts = {}) {
+    return opts['--out'] || nodePath.join(process.cwd(), '.github');
   },
 
   listOwnedEntries(skillsDir) {
-    return fs.readdirSync(skillsDir)
-      .filter(name => fs.statSync(nodePath.join(skillsDir, name)).isDirectory())
-      .map(name => `${name}.md`)
-      .sort();
+    return [
+      'copilot-instructions.md',
+      ...skillDirs(skillsDir).map(name => nodePath.join('instructions', `${name}.instructions.md`)),
+    ].sort();
   },
 
   export(skillsDir, outDir, _opts = {}) {
@@ -30,14 +63,25 @@ module.exports = {
     fsHelpers.ensureDir(outDir);
     fsHelpers.removeOwned(outDir, owned);
 
-    const skillDirs = fs.readdirSync(skillsDir)
-      .filter(name => fs.statSync(nodePath.join(skillsDir, name)).isDirectory())
-      .sort();
+    fs.writeFileSync(
+      nodePath.join(outDir, 'copilot-instructions.md'),
+      buildRepoInstructions(skillsDir)
+    );
 
-    for (const name of skillDirs) {
+    const instructionsDir = nodePath.join(outDir, 'instructions');
+    fsHelpers.ensureDir(instructionsDir);
+
+    for (const name of skillDirs(skillsDir)) {
       const skillFile = nodePath.join(skillsDir, name, 'SKILL.md');
       const content = fs.readFileSync(skillFile, 'utf8');
-      fs.writeFileSync(nodePath.join(outDir, `${name}.md`), stripFrontmatter(content));
+      const copilotContent = [
+        '---',
+        'applyTo: "**"',
+        '---',
+        '',
+        stripFrontmatter(content),
+      ].join('\n');
+      fs.writeFileSync(nodePath.join(instructionsDir, `${name}.instructions.md`), copilotContent);
     }
   },
 };

@@ -71,8 +71,16 @@ npm install -g .
 
 ```bash
 xppai list
-xppai install --target <target>
+xppai install --target all
 xppai xpo load <file>
+```
+
+Install one runtime at a time when needed:
+
+```bash
+xppai install --target codex
+xppai install --target claude
+xppai install --target copilot
 ```
 
 ## Supported Targets
@@ -81,10 +89,10 @@ xppai xpo load <file>
 
 - `claude`
 - `codex`
+- `copilot`
 
 ### Export-only targets
 
-- `copilot`
 - `generic`
 
 ## Learn More

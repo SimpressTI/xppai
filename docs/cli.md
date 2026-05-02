@@ -22,6 +22,15 @@ Install skills into a target runtime.
 
 Use `--mode symlink` during development when you want local skill edits to reflect without repeated copy operations.
 
+Supported install targets:
+
+- `codex`
+- `claude`
+- `copilot`
+- `all`
+
+`all` installs Codex personal skills, Claude Code personal skills, and GitHub Copilot repository instructions for the current working directory.
+
 ## XPO Commands
 
 ### `xppai xpo load <file> [--cache-dir <directory>]`

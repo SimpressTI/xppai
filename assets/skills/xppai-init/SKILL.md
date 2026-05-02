@@ -593,7 +593,7 @@ Command policy:
 - If user pastes raw XPO text: run `xppai xpo load-stdin --name "pasted.xpo"` with pasted content on stdin first.
 - If stdin piping is unavailable in the runtime: write pasted text to a temporary `.xpo` file and run `xppai xpo load "<temp-file>"`.
 - If both a file path and pasted XPO text are present, prioritize the explicit file path.
-- If no new XPO input is provided, use cache-first inquiry commands: `xppai xpo list`, `xppai xpo read`, and `xppai xpo grep`.
+- If no new XPO input is provided, use cache-first discovery with `xppai xpo snapshot --json` once, then `xppai xpo read` only for selected objects.
 - Do not use `xppai xpo --help` for runtime discovery in this workflow.
 
 Validation rule:

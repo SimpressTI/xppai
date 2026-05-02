@@ -45,6 +45,10 @@ The command validates that pasted XPO content appears complete before writing ca
 
 When loading a new revision for the same source path, the command warns that the active cache entry is being overwritten.
 
+### `xppai xpo snapshot [--file <path>] [--type <T>] [--limit <n>] [--json] [--cache-dir <directory>]`
+
+Return a bounded inventory of the active XPO cache for discovery.
+
 ### `xppai xpo list [--type <T>] [--file <path>] [--json] [--cache-dir <directory>]`
 
 List cached object inventory from the latest cached extract per source file.

@@ -77,7 +77,7 @@ Quick reference for available skills and usage guidance.
 
 ## XPO Intake Behavior
 
-When an XPO file or pasted XPO text is provided, XppAI loads it into the active analysis context once before analysis. Orchestrator skills such as `xppai-papai` and `xppai-babysit` pass `XPO intake already completed for this request` to selected specialist skills so they do not import the same XPO again. Specialist skills still perform XPO intake when used standalone.
+When an XPO file or pasted XPO text is provided, XppAI loads it into the active analysis context once before analysis. Orchestrator skills such as `xppai-papai` and `xppai-babysit` pass `XPO intake already completed for this request` to selected specialist skills so they do not import the same XPO again. When no new XPO is provided, use `xppai xpo snapshot --json` once to discover the cached object inventory, then `xppai xpo read` only for selected objects. Specialist skills still perform XPO intake when used standalone.
 
 ### Unknown Artifact
 

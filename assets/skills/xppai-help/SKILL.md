@@ -40,7 +40,7 @@ description: Use when asked what XppAI skills are available or how to use the Xp
 
 - New XPO file path provided: run `xppai xpo load "<file>"` before analysis skills
 - XPO pasted as text: run `xppai xpo load-stdin --name "pasted.xpo"` before analysis skills
-- If no new XPO is provided, use cache-first retrieval: `xppai xpo list`, `xppai xpo read`, `xppai xpo grep`
+- If no new XPO is provided, use cache-first discovery: `xppai xpo snapshot --json`, then `xppai xpo read`
 - If pasted XPO is incomplete, cache load must be skipped and analysis proceeds from pasted text only
 - Do not use `xppai xpo --help` for runtime discovery in this workflow
 

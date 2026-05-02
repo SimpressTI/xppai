@@ -30,6 +30,7 @@ test('xppai-init defines shared XPO intake state contract', () => {
   assert.match(content, /do not run any XPO intake command again/i);
   assert.match(content, /Do not run unrelated shell commands/i);
   assert.match(content, /replacing the active XPO analysis context/i);
+  assert.match(content, /xppai xpo snapshot --json/i);
 });
 
 test('xppai-papai runs XPO intake once before orchestration', () => {
@@ -40,6 +41,8 @@ test('xppai-papai runs XPO intake once before orchestration', () => {
   assert.match(content, /pass .*completed intake state/i);
   assert.match(content, /must not run XPO intake again/i);
   assert.match(content, /Only select skills that serve the user's prompt goal/i);
+  assert.match(content, /xppai xpo snapshot --json/i);
+  assert.doesNotMatch(content, /xppai xpo grep/i);
 });
 
 test('xppai-babysit runs XPO intake once before classification', () => {
@@ -48,6 +51,8 @@ test('xppai-babysit runs XPO intake once before classification', () => {
   assert.match(content, /run XPO intake at most once per user request/i);
   assert.match(content, /XPO intake already completed for this request/);
   assert.match(content, /Selected skills must not run XPO intake again/i);
+  assert.match(content, /xppai xpo snapshot --json/i);
+  assert.doesNotMatch(content, /xppai xpo grep/i);
 });
 
 for (const skill of SPECIALISTS) {

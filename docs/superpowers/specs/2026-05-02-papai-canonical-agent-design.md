@@ -24,7 +24,7 @@ The first working version has:
 
 - `assets/agents/xppai-papai/AGENT.md` as the canonical agent contract.
 - `assets/skills/xppai-papai/SKILL.md` as the legacy Codex skill entry point.
-- The legacy skill references or mirrors the canonical loop without changing trigger behavior.
+- `SKILL.md` must stay thin to avoid drift. It only references `assets/agents/xppai-papai/AGENT.md` as canonical, includes a short loop summary, and keeps the existing XPO intake behavior.
 - Existing specialist skills unchanged:
   - `xppai-init`
   - `xppai-explain`
@@ -33,6 +33,8 @@ The first working version has:
   - `xppai-codefix`
   - `xppai-posting`
   - `xppai-architect`
+  - `xppai-help`
+  - `xppai-exportxpo`
 
 Papai does not replace specialist skills. It controls when and why to use them.
 
@@ -58,6 +60,11 @@ The canonical loop is controlled and bounded:
 6. Stop or continue.
    Stop when the user's goal is answered with enough evidence. Continue only when another action materially improves the answer.
 
+Loop safety rule:
+
+- Do not exceed 3 investigation cycles unless the user explicitly requests deeper analysis.
+- One investigation cycle is: inspect evidence -> choose next action -> use skill/tool -> validate.
+
 ## Actions vs Skill Selection
 
 Current Papai selects skills. The canonical agent selects actions.
@@ -75,12 +82,16 @@ Actions are broader and more explicit:
 - `propose_codefix`
 - `synthesize_answer`
 - `stop_with_missing_context`
+- `show_skill_help`
+- `prepare_xpo_export`
 
 A skill selection is one possible implementation of an action. For example:
 
 - `explain_artifact` maps to `xppai-explain`.
 - `assess_change_risk` maps to `xppai-risk`.
 - `propose_codefix` maps to `xppai-codefix`.
+- `show_skill_help` maps to `xppai-help`.
+- `prepare_xpo_export` maps to `xppai-exportxpo`.
 
 This keeps the agent portable across Codex, Claude Code, and GitHub Copilot.
 
@@ -148,6 +159,8 @@ stop or continue
 - `propose_codefix`: use `xppai-codefix`.
 - `synthesize_answer`: produce senior assessment.
 - `stop_with_missing_context`: stop when more action would be speculative.
+- `show_skill_help`: use `xppai-help` when the user asks what XppAI can do or which skill to use.
+- `prepare_xpo_export`: use `xppai-exportxpo` when the user asks to export analyzed objects after assessment.
 
 ### Validation Rules
 
@@ -158,6 +171,9 @@ stop or continue
 - Label evidence as Confirmed, Likely, Hypothesis, or Unknown.
 - Do not run XPO intake more than once per request.
 - Do not apply skills that add no value.
+- Treat `AGENT.md` as canonical and keep `SKILL.md` as a thin compatibility wrapper.
+- Do not copy full Mission, Available Actions, Validation Rules, or Stop Conditions into `SKILL.md`.
+- Do not exceed 3 investigation cycles unless explicitly requested.
 
 ### Stop Conditions
 
@@ -168,6 +184,7 @@ Stop when:
 - The next possible action would only add noise.
 - Required context is missing and further analysis would be speculative.
 - A codefix cannot be safely proposed without required metadata.
+- 3 investigation cycles are completed and the user did not request deeper analysis.
 
 ## Adapter Contracts
 
@@ -240,20 +257,19 @@ Limitations:
 Phase 1 introduces the canonical source without a behavior break:
 
 - Add `assets/agents/xppai-papai/AGENT.md`.
-- Update legacy `SKILL.md` to include the controlled loop.
-- Add tests proving current skill export still works.
+- Update legacy `SKILL.md` with a canonical reference and short loop summary only.
+- Keep existing XPO intake behavior in `SKILL.md`.
 - Add tests proving the canonical agent file exists and contains required sections.
 
-Phase 2 adds package-level agent discovery only if needed:
+Phase 1.1 standardizes XPO analysis command usage to reduce repeated approval prompts:
 
-- Add `src/agents.js`.
-- Add `node bin/xppai.js agents` or extend `list` only if there is a clear CLI requirement.
-
-Phase 3 adds adapter export:
-
-- Extend `generic` export to optionally include `agents/`.
-- Extend `copilot` export to fold Papai agent guidance into instructions.
-- Extend `claude` only after confirming the desired Claude Code subagent file contract.
+- Add `xppai xpo analyze-load` as an alias to current `xppai xpo load`.
+- Add `xppai xpo analyze-snapshot` as an alias to current `xppai xpo snapshot --json`.
+- Add `xppai xpo analyze-list` as an alias to current `xppai xpo list`.
+- Add `xppai xpo analyze-read` as an alias to current `xppai xpo read`.
+- Add `xppai xpo analyze-grep` as an alias to current `xppai xpo grep`.
+- Update Papai instructions to use only the `analyze-*` family in normal intake/discovery/read flows.
+- Keep existing `xppai xpo` commands valid for backward compatibility.
 
 ## Risks
 
@@ -278,20 +294,41 @@ First working version only:
 
 - [ ] Create `assets/agents/xppai-papai/AGENT.md`.
 - [ ] Add `# XppAI Papai Canonical Agent` heading to `AGENT.md`.
-- [ ] Add `Mission` section to `AGENT.md`.
-- [ ] Add `Operating Loop` section with the six loop steps.
-- [ ] Add `Available Actions` section with the concrete action list.
-- [ ] Add `Validation Rules` section with AX 2009 constraints.
-- [ ] Add `Stop Conditions` section.
-- [ ] Update `assets/skills/xppai-papai/SKILL.md` heading or overview to say it is the legacy Codex skill entry point for the canonical Papai agent.
-- [ ] Copy the controlled loop summary into `assets/skills/xppai-papai/SKILL.md`.
-- [ ] Keep existing XPO intake section unchanged except where needed to align wording with the loop.
+- [ ] Add `## Mission` section to `AGENT.md`.
+- [ ] Add `## Operating Loop` section to `AGENT.md`.
+- [ ] Add the six loop steps under `## Operating Loop`.
+- [ ] Add the rule `Do not exceed 3 investigation cycles unless explicitly requested` under `## Operating Loop`.
+- [ ] Add `## Available Actions` section to `AGENT.md`.
+- [ ] Add analysis actions to `## Available Actions`: `load_xpo_once`, `snapshot_xpo_cache`, `read_selected_xpo_object`, `explain_artifact`, `analyze_stack_or_trace`, `assess_change_risk`, `analyze_posting_flow`, `review_architecture`, `propose_codefix`, `synthesize_answer`, `stop_with_missing_context`.
+- [ ] Add support actions to `## Available Actions`: `show_skill_help` and `prepare_xpo_export`.
+- [ ] Add `## Validation Rules` section to `AGENT.md`.
+- [ ] Add AX 2009, localization, evidence labeling, and codefix metadata rules to `## Validation Rules`.
+- [ ] Add the canonical-source and anti-duplication rules for `SKILL.md` to `## Validation Rules`.
+- [ ] Add `## Stop Conditions` section to `AGENT.md`.
+- [ ] Add the 3-cycle stop condition to `## Stop Conditions`.
+- [ ] Edit `assets/skills/xppai-papai/SKILL.md` overview to state it is the legacy Codex entry point.
+- [ ] Add one sentence in `SKILL.md` that references `assets/agents/xppai-papai/AGENT.md` as canonical.
+- [ ] Add a short six-step loop summary in `SKILL.md`.
+- [ ] Add the 3-cycle limit sentence to the short loop summary in `SKILL.md`.
+- [ ] Confirm `SKILL.md` keeps existing XPO intake behavior unchanged.
 - [ ] Create `test/agents/papai-agent.test.js`.
 - [ ] Add a test that `assets/agents/xppai-papai/AGENT.md` exists.
 - [ ] Add a test that `AGENT.md` contains `Mission`, `Operating Loop`, `Available Actions`, `Validation Rules`, and `Stop Conditions`.
 - [ ] Add a test that `AGENT.md` mentions `AX 2009`.
-- [ ] Add a test that `AGENT.md` mentions each specialist skill by name.
+- [ ] Add a test that `AGENT.md` mentions `xppai-init`, `xppai-explain`, `xppai-stack`, `xppai-risk`, `xppai-codefix`, `xppai-posting`, `xppai-architect`, `xppai-help`, and `xppai-exportxpo`.
+- [ ] Add a test that `AGENT.md` contains `Do not exceed 3 investigation cycles unless explicitly requested`.
 - [ ] Add a test that legacy `assets/skills/xppai-papai/SKILL.md` still contains the existing frontmatter name `xppai-papai`.
+- [ ] Add a test that `SKILL.md` references `assets/agents/xppai-papai/AGENT.md`.
+- [ ] Add a test that `SKILL.md` contains the 3-cycle limit sentence.
+- [ ] Add a test that `SKILL.md` does not include a `## Available Actions` section.
+- [ ] Add CLI route for `xppai xpo analyze-load` in `src/cli.js` mapping to the current `load` handler.
+- [ ] Add CLI route for `xppai xpo analyze-snapshot` in `src/cli.js` mapping to `snapshot` with JSON output.
+- [ ] Add CLI route for `xppai xpo analyze-list` in `src/cli.js` mapping to the current `list` handler.
+- [ ] Add CLI route for `xppai xpo analyze-read` in `src/cli.js` mapping to the current `read` handler.
+- [ ] Add CLI route for `xppai xpo analyze-grep` in `src/cli.js` mapping to the current `grep` handler.
+- [ ] Add tests in `test/xpo/*` proving each `analyze-*` alias executes and preserves the existing output shape.
+- [ ] Update `assets/skills/xppai-papai/SKILL.md` intake/discovery/read instructions to require the `analyze-*` command family.
+- [ ] Add a short documentation note in `README.md` (or existing XPO docs section) describing the standard `analyze-*` family for stable approvals.
 - [ ] Run `npm test`.
 
 Removed from the first version:

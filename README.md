@@ -75,6 +75,16 @@ xppai install --target all
 xppai xpo load <file>
 ```
 
+Standard XPO analysis command family (recommended for stable approval reuse):
+
+```bash
+xppai xpo analyze-load <file>
+xppai xpo analyze-snapshot
+xppai xpo analyze-list --type Class
+xppai xpo analyze-read --type Class --name MyClass
+xppai xpo analyze-grep --contains "search-text"
+```
+
 Install one runtime at a time when needed:
 
 ```bash

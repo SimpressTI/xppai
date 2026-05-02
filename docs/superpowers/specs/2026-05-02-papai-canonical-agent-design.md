@@ -33,7 +33,6 @@ The first working version has:
   - `xppai-codefix`
   - `xppai-posting`
   - `xppai-architect`
-  - `xppai-help`
   - `xppai-exportxpo`
 
 Papai does not replace specialist skills. It controls when and why to use them.
@@ -82,7 +81,6 @@ Actions are broader and more explicit:
 - `propose_codefix`
 - `synthesize_answer`
 - `stop_with_missing_context`
-- `show_skill_help`
 - `prepare_xpo_export`
 
 A skill selection is one possible implementation of an action. For example:
@@ -90,7 +88,6 @@ A skill selection is one possible implementation of an action. For example:
 - `explain_artifact` maps to `xppai-explain`.
 - `assess_change_risk` maps to `xppai-risk`.
 - `propose_codefix` maps to `xppai-codefix`.
-- `show_skill_help` maps to `xppai-help`.
 - `prepare_xpo_export` maps to `xppai-exportxpo`.
 
 This keeps the agent portable across Codex, Claude Code, and GitHub Copilot.
@@ -159,7 +156,6 @@ stop or continue
 - `propose_codefix`: use `xppai-codefix`.
 - `synthesize_answer`: produce senior assessment.
 - `stop_with_missing_context`: stop when more action would be speculative.
-- `show_skill_help`: use `xppai-help` when the user asks what XppAI can do or which skill to use.
 - `prepare_xpo_export`: use `xppai-exportxpo` when the user asks to export analyzed objects after assessment.
 
 ### Validation Rules
@@ -300,7 +296,7 @@ First working version only:
 - [ ] Add the rule `Do not exceed 3 investigation cycles unless explicitly requested` under `## Operating Loop`.
 - [ ] Add `## Available Actions` section to `AGENT.md`.
 - [ ] Add analysis actions to `## Available Actions`: `load_xpo_once`, `snapshot_xpo_cache`, `read_selected_xpo_object`, `explain_artifact`, `analyze_stack_or_trace`, `assess_change_risk`, `analyze_posting_flow`, `review_architecture`, `propose_codefix`, `synthesize_answer`, `stop_with_missing_context`.
-- [ ] Add support actions to `## Available Actions`: `show_skill_help` and `prepare_xpo_export`.
+- [ ] Add support action to `## Available Actions`: `prepare_xpo_export`.
 - [ ] Add `## Validation Rules` section to `AGENT.md`.
 - [ ] Add AX 2009, localization, evidence labeling, and codefix metadata rules to `## Validation Rules`.
 - [ ] Add the canonical-source and anti-duplication rules for `SKILL.md` to `## Validation Rules`.
@@ -315,17 +311,17 @@ First working version only:
 - [ ] Add a test that `assets/agents/xppai-papai/AGENT.md` exists.
 - [ ] Add a test that `AGENT.md` contains `Mission`, `Operating Loop`, `Available Actions`, `Validation Rules`, and `Stop Conditions`.
 - [ ] Add a test that `AGENT.md` mentions `AX 2009`.
-- [ ] Add a test that `AGENT.md` mentions `xppai-init`, `xppai-explain`, `xppai-stack`, `xppai-risk`, `xppai-codefix`, `xppai-posting`, `xppai-architect`, `xppai-help`, and `xppai-exportxpo`.
+- [ ] Add a test that `AGENT.md` mentions `xppai-init`, `xppai-explain`, `xppai-stack`, `xppai-risk`, `xppai-codefix`, `xppai-posting`, `xppai-architect`, and `xppai-exportxpo`.
 - [ ] Add a test that `AGENT.md` contains `Do not exceed 3 investigation cycles unless explicitly requested`.
 - [ ] Add a test that legacy `assets/skills/xppai-papai/SKILL.md` still contains the existing frontmatter name `xppai-papai`.
 - [ ] Add a test that `SKILL.md` references `assets/agents/xppai-papai/AGENT.md`.
 - [ ] Add a test that `SKILL.md` contains the 3-cycle limit sentence.
 - [ ] Add a test that `SKILL.md` does not include a `## Available Actions` section.
-- [ ] Add CLI route for `xppai xpo analyze-load` in `src/cli.js` mapping to the current `load` handler.
-- [ ] Add CLI route for `xppai xpo analyze-snapshot` in `src/cli.js` mapping to `snapshot` with JSON output.
-- [ ] Add CLI route for `xppai xpo analyze-list` in `src/cli.js` mapping to the current `list` handler.
-- [ ] Add CLI route for `xppai xpo analyze-read` in `src/cli.js` mapping to the current `read` handler.
-- [ ] Add CLI route for `xppai xpo analyze-grep` in `src/cli.js` mapping to the current `grep` handler.
+- [ ] Add CLI route for `xppai xpo analyze-load` in `src/commands/xpo/index.js` mapping to the current `load` handler.
+- [ ] Add CLI route for `xppai xpo analyze-snapshot` in `src/commands/xpo/index.js` mapping to `snapshot` with JSON output.
+- [ ] Add CLI route for `xppai xpo analyze-list` in `src/commands/xpo/index.js` mapping to the current `list` handler.
+- [ ] Add CLI route for `xppai xpo analyze-read` in `src/commands/xpo/index.js` mapping to the current `read` handler.
+- [ ] Add CLI route for `xppai xpo analyze-grep` in `src/commands/xpo/index.js` mapping to the current `grep` handler.
 - [ ] Add tests in `test/xpo/*` proving each `analyze-*` alias executes and preserves the existing output shape.
 - [ ] Update `assets/skills/xppai-papai/SKILL.md` intake/discovery/read instructions to require the `analyze-*` command family.
 - [ ] Add a short documentation note in `README.md` (or existing XPO docs section) describing the standard `analyze-*` family for stable approvals.

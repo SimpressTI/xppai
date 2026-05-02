@@ -15,6 +15,11 @@ module.exports = function xpo(flags, args) {
   const sub = args[0];
   const rest = args.slice(1);
 
+  if (sub === 'analyze-load') return load(flags, rest);
+  if (sub === 'analyze-snapshot') return snapshot({ ...flags, '--json': true }, rest);
+  if (sub === 'analyze-list') return list(flags, rest);
+  if (sub === 'analyze-read') return read(flags, rest);
+  if (sub === 'analyze-grep') return grep(flags, rest);
   if (sub === 'load') return load(flags, rest);
   if (sub === 'load-stdin') return loadStdin(flags, rest);
   if (sub === 'cache-copy') return cacheCopy(flags, rest);
@@ -30,14 +35,19 @@ module.exports = function xpo(flags, args) {
     'error: unknown xpo subcommand\n' +
     'usage:\n' +
     '  xppai xpo load <file> [--cache-dir <dir>]\n' +
+    '  xppai xpo analyze-load <file> [--cache-dir <dir>]\n' +
     '  xppai xpo load-stdin [--name <virtual-file-name>] [--cache-dir <dir>]\n' +
     '  xppai xpo cache-copy <dest> [--yes] [--cache-dir <dir>]\n' +
     '  xppai xpo cache-use <dir>\n' +
     '  xppai xpo cache-show [--cache-dir <dir>]\n' +
     '  xppai xpo snapshot [--file <path>] [--type <T>] [--limit <n>] [--json] [--cache-dir <dir>]\n' +
+    '  xppai xpo analyze-snapshot [--file <path>] [--type <T>] [--limit <n>] [--cache-dir <dir>]  (JSON always on)\n' +
     '  xppai xpo list [--type <T>] [--file <path>] [--json] [--cache-dir <dir>]\n' +
+    '  xppai xpo analyze-list [--type <T>] [--file <path>] [--json] [--cache-dir <dir>]\n' +
     '  xppai xpo read --type <T> --name <N> [--file <path>] [--json] [--cache-dir <dir>]\n' +
+    '  xppai xpo analyze-read --type <T> --name <N> [--file <path>] [--json] [--cache-dir <dir>]\n' +
     '  xppai xpo grep --contains <text> [--type <T>] [--file <path>] [--limit <n>] [--json] [--cache-dir <dir>]\n' +
+    '  xppai xpo analyze-grep --contains <text> [--type <T>] [--file <path>] [--limit <n>] [--json] [--cache-dir <dir>]\n' +
     '  xppai xpo export-modified --out <dir> [--file <xpo-file>] [--cache-dir <dir>]\n'
   );
   process.exit(1);

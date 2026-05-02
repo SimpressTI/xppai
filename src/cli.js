@@ -8,6 +8,17 @@ const COMMANDS = {
   xpo:     require('./commands/xpo'),
 };
 
+function printHelp() {
+  const valid = Object.keys(COMMANDS).join(', ');
+  process.stdout.write(
+    'xppai - LLM-runtime-agnostic X++ AX 2009 skill suite\n' +
+    'usage: xppai <command> [options]\n' +
+    '       xppai --help\n' +
+    '       xppai --version\n' +
+    `commands: ${valid}\n`
+  );
+}
+
 function parseArgs(argv) {
   const flags = {};
   const positionals = [];
@@ -20,6 +31,10 @@ function parseArgs(argv) {
       const next = argv[i + 1];
       flags[arg] = (next !== undefined && !next.startsWith('--')) ? next : true;
       if (next !== undefined && !next.startsWith('--')) i++;
+    } else if (arg === '-h') {
+      flags['--help'] = true;
+    } else if (arg === '-v') {
+      flags['--version'] = true;
     }
     i++;
   }
@@ -28,6 +43,18 @@ function parseArgs(argv) {
 
 async function run(argv) {
   const { command, positionals, flags } = parseArgs(argv.slice(2));
+  if (flags['--version']) {
+    process.stdout.write(`${require('../package.json').version}\n`);
+    return;
+  }
+  if (flags['--help']) {
+    printHelp();
+    return;
+  }
+  if (!command) {
+    printHelp();
+    process.exit(1);
+  }
   const handler = COMMANDS[command];
   if (!handler) {
     const valid = Object.keys(COMMANDS).join(', ');

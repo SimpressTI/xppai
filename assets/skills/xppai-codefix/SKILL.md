@@ -9,6 +9,15 @@ description: Use when proposing X++ AX 2009 code fixes for identified performanc
 
 **MANDATORY PRE-STEP:** Run the XPO Intake Gate only when XPO input is present and no orchestrator has already completed intake for this request.
 
+## Execution Decision Gate
+
+- Run this gate only for XPO-analysis requests.
+- If an orchestrator already completed intake for this request, do not run intake again.
+- Use `xppai xpo analyze-*` first to establish evidence before proposing fixes.
+- Direct cache/file fallback is allowed only when analyze fails or required detail is missing.
+- Output markers are mandatory: `Path used: analyze-first` or `Path used: fallback`.
+- If fallback is used, include: `Fallback reason: <failure|missing detail> - <concrete detail>`.
+
 ## Overview
 
 Specialist technique for generating the smallest effective X++ fix that solves an identified issue without unnecessary redesign, preserving business behavior and fitting AX 2009 coding conventions.

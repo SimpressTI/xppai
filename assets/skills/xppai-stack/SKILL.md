@@ -9,6 +9,15 @@ description: Use when analyzing X++ AX 2009 profiler traces, code stack traces, 
 
 **MANDATORY PRE-STEP:** Run the XPO Intake Gate only when XPO input is present and no orchestrator has already completed intake for this request.
 
+## Execution Decision Gate
+
+- Run this gate only for XPO-analysis requests.
+- If an orchestrator already completed intake for this request, do not run intake again.
+- Use `xppai xpo analyze-*` first for hotspot and evidence discovery.
+- Direct cache/file fallback is allowed only when analyze fails or required detail is missing.
+- Output markers are mandatory: `Path used: analyze-first` or `Path used: fallback`.
+- If fallback is used, include: `Fallback reason: <failure|missing detail> - <concrete detail>`.
+
 ## Overview
 
 Specialist technique for reading AX 2009 X++ profiler outputs and code execution stack traces, identifying the dominant call path, and ranking bottlenecks by actual impact — not generic advice.

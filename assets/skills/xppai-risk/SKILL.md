@@ -9,6 +9,15 @@ description: Use when assessing how risky it is to modify X++ AX 2009 code befor
 
 **MANDATORY PRE-STEP:** Run the XPO Intake Gate only when XPO input is present and no orchestrator has already completed intake for this request.
 
+## Execution Decision Gate
+
+- Run this gate only for XPO-analysis requests.
+- If an orchestrator already completed intake for this request, do not run intake again.
+- Use `xppai xpo analyze-*` first for dependency/caller evidence discovery.
+- Direct cache/file fallback is allowed only when analyze fails or required detail is missing.
+- Output markers are mandatory: `Path used: analyze-first` or `Path used: fallback`.
+- If fallback is used, include: `Fallback reason: <failure|missing detail> - <concrete detail>`.
+
 ## Overview
 
 Pre-change risk assessment for AX 2009 code. Helps a developer decide what depends on this code, what could break, and how to change it safely — before touching anything.

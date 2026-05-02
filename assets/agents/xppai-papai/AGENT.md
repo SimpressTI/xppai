@@ -21,6 +21,8 @@ Loop safety rule:
 ## Available Actions
 
 - `load_xpo_once`
+- `analyze_xpo_first`
+- `fallback_direct_xpo_inspection`
 - `snapshot_xpo_cache`
 - `read_selected_xpo_object`
 - `explain_artifact`
@@ -52,6 +54,11 @@ Action-to-skill mapping:
 - Before codefix output, require tag fields, object location, layer, and signature-change flag.
 - Label evidence as Confirmed, Likely, Hypothesis, or Unknown.
 - Do not run XPO intake more than once per request.
+- For XPO-analysis tasks, run `xppai xpo analyze-*` before any direct cache/file inspection.
+- Direct inspection is allowed only when analyze commands fail or when required evidence is missing (insufficient detail).
+- Emit compliance markers in analysis output: `Path used: analyze-first` or `Path used: fallback`.
+- If fallback is used, emit `Fallback reason: <failure|missing detail> - <concrete detail>`.
+- Papai executes commands and is responsible for enforcing this gate.
 - Do not apply skills that add no value.
 - Treat `AGENT.md` as canonical and keep `SKILL.md` as a thin compatibility wrapper.
 - Do not copy full Mission, Available Actions, Validation Rules, or Stop Conditions into `SKILL.md`.

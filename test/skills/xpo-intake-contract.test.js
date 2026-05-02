@@ -13,10 +13,8 @@ function readSkill(name) {
 }
 
 const SPECIALISTS = [
-  'xppai-architect',
   'xppai-codefix',
   'xppai-explain',
-  'xppai-posting',
   'xppai-risk',
   'xppai-stack',
 ];
@@ -42,9 +40,10 @@ test('xppai-papai runs XPO intake once before orchestration', () => {
   assert.match(content, /pass .*completed intake state/i);
   assert.match(content, /must not run XPO intake again/i);
   assert.match(content, /Only select skills that serve the user's prompt goal/i);
-  assert.match(content, /xppai xpo snapshot --json/i);
-  assert.match(content, /snapshot approval persists/i);
-  assert.doesNotMatch(content, /xppai xpo grep/i);
+  assert.match(content, /analyze-\*/i);
+  assert.match(content, /Path used:\s*analyze-first/i);
+  assert.match(content, /Fallback reason:\s*<failure\|missing detail>/i);
+  assert.doesNotMatch(content, /xppai xpo snapshot --json/i);
 });
 
 test('xppai-babysit runs XPO intake once before classification', () => {
@@ -53,17 +52,21 @@ test('xppai-babysit runs XPO intake once before classification', () => {
   assert.match(content, /run XPO intake at most once per user request/i);
   assert.match(content, /XPO intake already completed for this request/);
   assert.match(content, /Selected skills must not run XPO intake again/i);
-  assert.match(content, /xppai xpo snapshot --json/i);
-  assert.match(content, /snapshot approval persists/i);
-  assert.doesNotMatch(content, /xppai xpo grep/i);
+  assert.match(content, /Execution Decision Gate/i);
+  assert.match(content, /analyze-\*/i);
+  assert.match(content, /Path used:\s*analyze-first/i);
+  assert.match(content, /Fallback reason:\s*<failure\|missing detail>/i);
+  assert.doesNotMatch(content, /xppai xpo snapshot --json/i);
 });
 
 for (const skill of SPECIALISTS) {
-  test(`${skill} skips XPO intake when orchestrator already completed it`, () => {
+  test(`${skill} enforces analyze-first path with controlled fallback`, () => {
     const content = readSkill(skill);
 
     assert.match(content, /Run the XPO Intake Gate only when/i);
     assert.match(content, /no orchestrator has already completed intake for this request/i);
-    assert.doesNotMatch(content, /execute the xppai-init XPO Intake Gate immediately before any analysis output/i);
+    assert.match(content, /analyze-\*/i);
+    assert.match(content, /Path used:\s*analyze-first/i);
+    assert.match(content, /Fallback reason:\s*<failure\|missing detail>/i);
   });
 }

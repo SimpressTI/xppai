@@ -39,11 +39,26 @@ Before Step 1, check whether the artifact is XPO input (file path or pasted XPO 
 - If pasted XPO is incomplete and cache load fails, continue analysis from provided text and mark cache import as skipped.
 - Run XPO intake at most once per user request.
 - If no new XPO is provided, use cache-first discovery with `xppai xpo analyze-snapshot` once, then `xppai xpo analyze-read` only for selected objects and do not reload; snapshot approval persists for the current Codex session and the same cache fingerprint.
-- Legacy equivalent for compatibility: `xppai xpo snapshot --json`.
 - After successful intake, record and pass this state to selected skills: `XPO intake already completed for this request`.
 - When applying selected skills, pass the completed intake state; selected skills must not run XPO intake again.
 - Do not run unrelated shell commands to inspect files, search repositories, list directories, or discover context unless the user asked for that or the XPO load command failed and diagnosis is required.
 - Do not use `xppai xpo --help` for runtime discovery in this workflow.
+
+## Execution Decision Gate
+
+After intake state is known, apply this gate before any direct shell inspection:
+
+1. Confirm this request is XPO-analysis.
+2. Run `xppai xpo analyze-*` first.
+3. Allow fallback to direct cache/file inspection only if:
+   - analyze command failed, or
+   - analyze output is insufficient for required evidence detail.
+4. Papai executes commands and is responsible for enforcing this gate.
+
+Required output markers:
+
+- `Path used: analyze-first` or `Path used: fallback`
+- If fallback is used: `Fallback reason: <failure|missing detail> - <concrete detail>`
 
 For action definitions, validation rules, and stop conditions, follow `assets/agents/xppai-papai/AGENT.md`.
 

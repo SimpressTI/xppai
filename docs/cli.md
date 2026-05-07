@@ -51,15 +51,15 @@ Return a bounded inventory of the active XPO cache and record session authorizat
 
 ### `xppai xpo list [--type <T>] [--file <path>] [--json] [--cache-dir <directory>]`
 
-List cached object inventory from the latest cached extract per source file. Requires a matching snapshot-approved cache session.
+List cached object inventory from the latest cached extract per source file. For cache-query workflows, run `xppai xpo snapshot --json` first.
 
 ### `xppai xpo read --type <T> --name <N> [--file <path>] [--json] [--cache-dir <directory>]`
 
-Read one cached object (including code content) by type/name. Requires a matching snapshot-approved cache session.
+Read one cached object (including code content) by type/name. For cache-query workflows, run `xppai xpo snapshot --json` first.
 
 ### `xppai xpo grep --contains <text> [--type <T>] [--file <path>] [--limit <n>] [--json] [--cache-dir <directory>]`
 
-Search cached object content using case-insensitive text matching. Requires a matching snapshot-approved cache session.
+Search cached object content using case-insensitive text matching. For cache-query workflows, run `xppai xpo snapshot --json` first.
 
 ### `xppai xpo cache-use <directory>`
 
@@ -75,7 +75,7 @@ Copy current cache content to another location. If destination is non-empty, con
 
 ### `xppai xpo export-modified --out <directory> [--file <source-xpo-file>] [--cache-dir <directory>]`
 
-Export one `.xpo` per changed/new object by comparing the latest and previous cache extracts for the same source file. Requires a matching snapshot-approved cache session.
+Export one `.xpo` per changed/new object by comparing the latest and previous cache extracts for the same source file. For cache-query workflows, run `xppai xpo snapshot --json` first.
 
 ## Papai Direct-File Note
 

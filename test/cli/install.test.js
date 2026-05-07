@@ -15,6 +15,8 @@ test('cli: install copilot writes repository instruction files to --out', () => 
     assert.match(output, /installed copilot to /);
     assert.ok(fs.existsSync(path.join(tempDir, 'copilot-instructions.md')));
     assert.ok(fs.existsSync(path.join(tempDir, 'instructions', 'xppai-papai.instructions.md')));
+    assert.ok(fs.existsSync(path.join(tempDir, 'prompts', 'xppai.prompt.md')));
+    assert.ok(fs.existsSync(path.join(tempDir, 'prompts', 'babysit.prompt.md')));
   } finally {
     fs.rmSync(tempDir, { recursive: true, force: true });
   }

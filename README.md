@@ -92,6 +92,8 @@ xppai install --target copilot
 - `codex`
 - `copilot`
 
+For `copilot`, install writes repository instruction files under `.github` (not skill directories or separate agent objects).
+
 ### Export-only targets
 
 - `generic`

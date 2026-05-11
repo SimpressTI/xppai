@@ -56,12 +56,10 @@ Copilot target installs repository custom instructions to the current working di
 ```text
 .github/copilot-instructions.md
 .github/instructions/xppai-*.instructions.md
-.github/prompts/xppai.prompt.md
-.github/prompts/babysit.prompt.md
 ```
 
 Run `xppai install --target copilot` from the repository where you want GitHub Copilot to use XppAI guidance.
-In Copilot Chat (prompt files enabled), use `/xppai` for dynamic orchestration and `/babysit` for fixed-sequence analysis.
+Copilot target installs instruction files for repository context; it does not install skill directories, agent objects, or prompt command files.
 
 Export for manual use:
 

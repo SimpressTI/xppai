@@ -29,7 +29,7 @@ Supported install targets:
 - `copilot`
 - `all`
 
-`all` installs Codex personal skills, Claude Code personal skills, and GitHub Copilot repository instructions for the current working directory.
+`all` installs Codex personal skills, Claude Code personal skills, and GitHub Copilot repository instructions for the current working directory. Copilot install writes instruction files only (not skill directories or agent objects).
 
 ## XPO Commands
 

@@ -9,7 +9,7 @@ These use packaged skill directories directly and support `install`:
 - `claude`
 - `codex`
 
-These install repository instructions and support `install`:
+These install repository-local skills and support `install`:
 
 - `copilot`
 
@@ -51,15 +51,17 @@ Claude target installs to:
 ~/.claude/skills
 ```
 
-Copilot target installs repository custom instructions to the current working directory:
+Copilot target installs GitHub Copilot CLI project skills to the current working repository:
 
 ```text
-.github/copilot-instructions.md
-.github/instructions/xppai-*.instructions.md
+.github/skills/xppai-papai/SKILL.md
+.github/skills/xppai-babysit/SKILL.md
+.github/skills/xppai-init/SKILL.md
+...
 ```
 
-Run `xppai install --target copilot` from the repository where you want GitHub Copilot to use XppAI guidance.
-Copilot target installs instruction files for repository context; it does not install skill directories, agent objects, or prompt command files.
+Run `xppai install --target copilot` from the repository where you want GitHub Copilot CLI to discover XppAI skills.
+Verify installation in Copilot CLI with `/skills list`.
 
 Export for manual use:
 

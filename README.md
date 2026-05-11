@@ -92,7 +92,7 @@ xppai install --target copilot
 - `codex`
 - `copilot`
 
-For `copilot`, install writes repository instruction files under `.github` (not skill directories or separate agent objects).
+For `copilot`, install writes GitHub Copilot CLI project skills under `.github/skills` inside the current repository.
 
 ### Export-only targets
 

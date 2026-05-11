@@ -44,44 +44,6 @@ function buildRepoInstructions(skillsDir) {
   return lines.join('\n');
 }
 
-function buildPromptXppai() {
-  return [
-    '---',
-    "mode: 'agent'",
-    "description: 'XppAI dynamic AX 2009 orchestrator'",
-    '---',
-    '',
-    'Act as `xppai-papai` for Microsoft Dynamics AX 2009 and X++ analysis.',
-    'Always apply `xppai-init` guardrails first.',
-    'Select specialist logic dynamically from: xppai-explain, xppai-stack, xppai-codefix, xppai-architect, xppai-posting, xppai-risk, xppai-exportxpo, xppai-help.',
-    'Label claims as Confirmed / Likely / Unknown.',
-    'Never modify or suggest modifying localization blocks: <GBR>, <GIN>, <GJP>, <GSA>, <GTH>.',
-    'AX 2009 only. Keep variable declarations at top of method when proposing X++ code.',
-    '',
-    'User request:',
-    '${input:request:Describe the AX 2009/X++ artifact or question}',
-  ].join('\n');
-}
-
-function buildPromptBabysit() {
-  return [
-    '---',
-    "mode: 'agent'",
-    "description: 'XppAI fixed-sequence AX 2009 analysis'",
-    '---',
-    '',
-    'Act as `xppai-babysit` for Microsoft Dynamics AX 2009 and X++ analysis.',
-    'Always apply `xppai-init` guardrails first.',
-    'Run fixed-sequence specialist analysis based on artifact type.',
-    'Label claims as Confirmed / Likely / Unknown.',
-    'Never modify or suggest modifying localization blocks: <GBR>, <GIN>, <GJP>, <GSA>, <GTH>.',
-    'AX 2009 only. Keep variable declarations at top of method when proposing X++ code.',
-    '',
-    'User request:',
-    '${input:request:Describe the AX 2009/X++ artifact or question}',
-  ].join('\n');
-}
-
 module.exports = {
   id: 'copilot',
 
@@ -93,8 +55,6 @@ module.exports = {
     return [
       'copilot-instructions.md',
       ...skillDirs(skillsDir).map(name => nodePath.join('instructions', `${name}.instructions.md`)),
-      nodePath.join('prompts', 'xppai.prompt.md'),
-      nodePath.join('prompts', 'babysit.prompt.md'),
     ].sort();
   },
 
@@ -124,9 +84,5 @@ module.exports = {
       fs.writeFileSync(nodePath.join(instructionsDir, `${name}.instructions.md`), copilotContent);
     }
 
-    const promptsDir = nodePath.join(outDir, 'prompts');
-    fsHelpers.ensureDir(promptsDir);
-    fs.writeFileSync(nodePath.join(promptsDir, 'xppai.prompt.md'), buildPromptXppai());
-    fs.writeFileSync(nodePath.join(promptsDir, 'babysit.prompt.md'), buildPromptBabysit());
   },
 };

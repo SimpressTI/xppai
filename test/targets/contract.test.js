@@ -49,12 +49,12 @@ test('adapter claude: installs into ~/.claude/skills', () => {
   );
 });
 
-test('adapter copilot: installs into the current repository .github directory', () => {
+test('adapter copilot: installs into the current repository .github/skills directory', () => {
   const adapter = require('../../src/targets/copilot');
   const result = adapter.resolveInstallDir({});
   assert.equal(
     result,
-    nodePath.join(process.cwd(), '.github'),
-    'copilot.resolveInstallDir() must target the current repository .github directory'
+    nodePath.join(process.cwd(), '.github', 'skills'),
+    'copilot.resolveInstallDir() must target the current repository .github/skills directory'
   );
 });

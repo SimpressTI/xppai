@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const { mkdtemp } = require('../helpers/tmp');
 
-test('copilot adapter exports repository custom instructions layout', () => {
+test('copilot adapter exports Copilot CLI skill directories', () => {
   const adapter = require('../../src/targets/copilot');
   const assets = require('../../src/assets');
   const tempDir = mkdtemp('xppai-copilot-');
@@ -14,31 +14,23 @@ test('copilot adapter exports repository custom instructions layout', () => {
   try {
     adapter.export(assets.path(), tempDir);
 
-    const repoInstructions = path.join(tempDir, 'copilot-instructions.md');
-    assert.ok(fs.existsSync(repoInstructions), 'copilot-instructions.md must be exported');
+    const papaiDir = path.join(tempDir, 'xppai-papai');
+    assert.ok(fs.statSync(papaiDir).isDirectory(), 'xppai-papai skill directory must be exported');
 
-    const repoContent = fs.readFileSync(repoInstructions, 'utf8');
-    assert.match(repoContent, /XppAI/);
-    assert.match(repoContent, /AX 2009/);
-    assert.match(repoContent, /xppai-papai/);
-    assert.match(repoContent, /open and analyze the local `.xpo` file directly/);
+    const papaiSkill = path.join(papaiDir, 'SKILL.md');
+    assert.ok(fs.existsSync(papaiSkill), 'SKILL.md must be preserved for Copilot skills');
 
-    const instructionsDir = path.join(tempDir, 'instructions');
-    assert.ok(fs.statSync(instructionsDir).isDirectory(), 'instructions directory must be exported');
-    assert.ok(!fs.existsSync(path.join(tempDir, 'prompts')), 'prompts directory must not be exported');
+    const papaiContent = fs.readFileSync(papaiSkill, 'utf8');
+    assert.match(papaiContent, /^---\r?\nname:\s*xppai-papai/m);
+    assert.match(papaiContent, /Dynamic Senior Analysis Agent/);
+
+    assert.ok(!fs.existsSync(path.join(tempDir, 'copilot-instructions.md')));
+    assert.ok(!fs.existsSync(path.join(tempDir, 'instructions')));
+    assert.ok(!fs.existsSync(path.join(tempDir, 'prompts')));
 
     const owned = adapter.listOwnedEntries(assets.path());
-    const actual = [
-      'copilot-instructions.md',
-      ...fs.readdirSync(instructionsDir).map(name => path.join('instructions', name)),
-    ].sort();
-    assert.deepEqual(actual, owned.sort(), 'exported Copilot files must match owned entries');
-
-    const papaiFile = path.join(instructionsDir, 'xppai-papai.instructions.md');
-    const papaiContent = fs.readFileSync(papaiFile, 'utf8');
-    assert.match(papaiContent, /^---\r?\napplyTo: "\*\*"\r?\n---/);
-    assert.doesNotMatch(papaiContent, /^name:/m);
-    assert.match(papaiContent, /Dynamic Senior Analysis Agent/);
+    const actual = fs.readdirSync(tempDir).sort();
+    assert.deepEqual(actual, owned.sort(), 'exported Copilot skills must match owned entries');
   } finally {
     fs.rmSync(tempDir, { recursive: true, force: true });
   }

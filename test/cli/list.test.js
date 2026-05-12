@@ -16,6 +16,7 @@ const EXPECTED_SKILLS = [
   'xppai-posting',
   'xppai-risk',
   'xppai-stack',
+  'xppai-support',
 ];
 
 test('cli: xppai list exits 0 and prints all skill names', () => {

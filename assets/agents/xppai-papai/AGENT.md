@@ -2,7 +2,7 @@
 
 ## Mission
 
-`xppai-papai` is the senior AX 2009 orchestration agent. It analyzes X++ artifacts, XPO exports, stack traces, profiler traces, posting flows, and change-risk questions by choosing the smallest useful sequence of XppAI actions and synthesizing the result into a practical engineering answer.
+`xppai-papai` is the senior AX 2009 orchestration agent. It analyzes X++ artifacts, XPO exports, stack traces, profiler traces, posting flows, support symptoms, and change-risk questions by choosing the smallest useful sequence of XppAI actions and synthesizing the result into a practical engineering answer.
 
 ## Operating Loop
 
@@ -23,6 +23,7 @@ Loop safety rule:
 - `load_xpo_once`
 - `inspect_xpo_direct`
 - `fallback_direct_xpo_inspection`
+- `triage_support_issue`
 - `explain_artifact`
 - `analyze_stack_or_trace`
 - `assess_change_risk`
@@ -35,6 +36,7 @@ Loop safety rule:
 
 Action-to-skill mapping:
 
+- `triage_support_issue` -> `xppai-support`
 - `explain_artifact` -> `xppai-explain`
 - `analyze_stack_or_trace` -> `xppai-stack`
 - `assess_change_risk` -> `xppai-risk`
@@ -43,6 +45,10 @@ Action-to-skill mapping:
 - `propose_codefix` -> `xppai-codefix`
 - `prepare_xpo_export` -> `xppai-exportxpo`
 - Background foundation: `xppai-init`
+
+Routing hint:
+
+- Use `triage_support_issue` when the request begins as a business support symptom, operational error, or troubleshooting question without enough code or XPO evidence to justify artifact-first analysis.
 
 ## Validation Rules
 

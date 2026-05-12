@@ -47,6 +47,10 @@ Analyze profiler traces and stack traces for performance bottlenecks.
 
 Assess change risk before implementing modifications.
 
+### `xppai-support`
+
+Troubleshoot AX 2009 support symptoms that start as business errors rather than code artifacts.
+
 ### `xppai-codefix`
 
 Generate minimal, production-oriented fixes after root cause and risk are understood.
@@ -96,6 +100,13 @@ When an XPO file or pasted XPO text is provided, XppAI uses direct intake once b
 1. `xppai-posting`  
 2. `xppai-explain`  
 3. `xppai-risk`
+
+### Symptom-First Support Issue
+
+1. `xppai-papai`
+2. `xppai-support`
+3. `xppai-posting` or `xppai-explain` (if technical evidence is provided)
+4. `xppai-risk` / `xppai-codefix` (only if change work begins)
 
 ### Pre-change Review
 

@@ -73,6 +73,12 @@ test('legacy SKILL.md references canonical AGENT.md and cycle limit', () => {
   assert.match(content, /Do not exceed 3 investigation cycles unless explicitly requested/);
 });
 
+test('legacy SKILL.md includes support-triage compatibility guidance', () => {
+  const content = fs.readFileSync(SKILL_PATH, 'utf8');
+  assert.match(content, /xppai-support/);
+  assert.match(content, /business support symptom/i);
+});
+
 test('legacy SKILL.md references direct-file intake and avoids cache-first snapshot path', () => {
   const content = fs.readFileSync(SKILL_PATH, 'utf8');
   assert.match(content, /open the local `.xpo` file directly/i);

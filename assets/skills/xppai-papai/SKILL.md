@@ -28,6 +28,8 @@ Do not exceed 3 investigation cycles unless explicitly requested.
 
 Only select skills that serve the user's prompt goal.
 
+When the request begins as a business support symptom, operational error, or troubleshooting question without enough code or XPO evidence to justify artifact-first analysis, route first to `xppai-support`.
+
 ## XPO Intake Before Analysis
 
 Before Step 1, check whether the artifact is XPO input (file path or pasted XPO text with object headers like `CLASS #`, `TABLE #`, `FORM #`).

@@ -55,6 +55,13 @@ test('AGENT.md references required skills', () => {
   }
 });
 
+test('AGENT.md includes support triage action mapping', () => {
+  const content = fs.readFileSync(AGENT_PATH, 'utf8');
+  assert.match(content, /triage_support_issue/);
+  assert.match(content, /xppai-support/);
+  assert.match(content, /business support symptom/i);
+});
+
 test('legacy SKILL.md keeps frontmatter name', () => {
   const content = fs.readFileSync(SKILL_PATH, 'utf8');
   assert.match(content, /name:\s*xppai-papai/);

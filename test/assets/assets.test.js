@@ -16,9 +16,10 @@ const EXPECTED_SKILLS = [
   'xppai-posting',
   'xppai-risk',
   'xppai-stack',
+  'xppai-support',
 ];
 
-test('assets.list() returns all 11 skills in sorted order', () => {
+test('assets.list() returns all 12 skills in sorted order', () => {
   const assets = require('../../src/assets');
   assert.deepEqual(assets.list(), EXPECTED_SKILLS);
 });
